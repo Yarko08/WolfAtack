@@ -29,8 +29,8 @@ body{
 }
 #pollitos{
 position:absolute;
-top:100px;
-left: 730px;
+/*top:100px;
+left: 730px;*/
 visibility: hidden;
 
 }

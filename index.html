@@ -14,10 +14,17 @@
 
         $(document).ready(function(){
             $('#btnJugar').mouseenter(function(){
-            
+                var top = $('#btnJugar').position().top;
+                var left = $('#btnJugar').position().left;
+                
+                top -=33
+                left += 251
+              
             $('#pollitos').css({
-                 
-                  "visibility": "visible" //O lo que desees
+                    
+                  "visibility": "visible", //O lo que desees
+                  "top" : top+"px",
+                  "left" : left +"px"
                 });
                     });
         });
