@@ -3,12 +3,7 @@ body{
     background-position-y: 40%;
     background-size: 50%;
 }
-#bannerNombre img{
-    background-image: url(nombrejuego.png);
-    width: 20%;
-    height: 40%;
-    margin:0px;
-}
+
 #opciones{
     background-color: rgb(248, 242, 190);
     border: 2px solid black;
@@ -17,6 +12,7 @@ body{
     width: 400px;
     height: 200px;
     margin-bottom: 5px;
+    margin-top: 10%;
 }
  #btnCancelar, #btnAceptar{
     border-radius: 10px;
