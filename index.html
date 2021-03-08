@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Akaya+Kanadaka&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="CSS//index.css">
+    <script type="text/javascript" src="js/jquery-3.5.1.min.js"></script> 
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+            $('#btnJugar').mouseenter(function(){
+            
+            $('#pollitos').css({
+                 
+                  "visibility": "visible" //O lo que desees
+                });
+                    });
+        });
+        $(document).ready(function(){
+            $('#btnJugar').mouseleave(function(){
+            
+            $('#pollitos').css({
+                 
+                  "visibility": "hidden" //O lo que desees
+                });
+                    });
+        });
+      
+
+
+    </script>
+</head>
+
+<body>
+    <div class="Menu">
+        <div id="contenedor">
+            <div id="bannerNombre">
+            </div>
+            <center>
+                <div id="botones">
+                    
+                    <div>
+                        <img id="pollitos" src="CSS/botonJugar.png" alt="botonJugar" height="150" width="150" >
+                        <button id="btnJugar">Jugar</button>
+                    </div>
+                    <div>
+                        <button id="btnConfig">Configuraciones</button>
+                    </div>
+                    <div>
+                        <button id="btnPuntuaciones">Puntuaciones</button>
+                    </div>
+                </div>
+
+            </center>
+        </div>
+    </div>
+</body>
+
+</html>
