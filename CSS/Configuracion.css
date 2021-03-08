@@ -3,18 +3,24 @@ body{
     background-position-y: 40%;
     background-size: 50%;
 }
+#bannerNombre img{
+    background-image: url(nombrejuego.png);
+    width: 20%;
+    height: 40%;
+    margin:0px;
+}
 #opciones{
     background-color: rgb(248, 242, 190);
     border: 2px solid black;
     border-radius: 25px;
     padding: 20px;
     width: 400px;
-    height: 300px;
+    height: 200px;
     margin-bottom: 5px;
 }
  #btnCancelar, #btnAceptar{
     border-radius: 10px;
-   /* width: 35%;*/
+   /* */
     padding: 2%;
     font-size: 45px;
     font-weight: bolder;
@@ -26,12 +32,13 @@ body{
 #cbox1{
     width: 20px;
     height: 20px;
-    margin: 50px;
 }
 
+
 .texto{
-    font-size: 45px;
+    font-size: 25px;
     font-weight: bolder;
+    margin: 20px;
     font-family: 'Akaya Kanadaka', cursive;
     color: rgb(238, 162, 48);
     border-color: rgb(241, 202, 94);
@@ -43,3 +50,9 @@ body{
 }
 
 
+#btnCancelar:hover{
+    background-color: rgb(248, 240, 163);
+}
+#btnAceptar:hover{
+    background-color: rgb(248, 240, 163);
+}
