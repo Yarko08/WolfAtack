@@ -3,9 +3,9 @@
 }
 body{
     font-family: 'Akaya Kanadaka', cursive;
-    color: rgb(219, 136, 11);
+    color: rgb(240, 154, 26);
     background-image: url(menus.png);
-    background-size: 100%;
+    background-size: 50%;
 }
 h1{
     margin: 4%;
@@ -29,8 +29,7 @@ h1{
 }
 #btnregresar{
     background-color: rgb(248, 242, 190);
-    color: rgb(219, 136, 11);
-    color: rgb(219, 136, 11);
+    color: rgb(240, 154, 26);
     border-radius: 10px;
     font-size: 30px;
     font-weight: bolder;
