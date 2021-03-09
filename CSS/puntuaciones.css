@@ -4,7 +4,7 @@
 body{
     font-family: 'Akaya Kanadaka', cursive;
     color: rgb(238, 151, 20);
-    background-image: url(/CSS/menus.png);
+    background-image: url(menus.png);
     background-size: 100%;
 }
 h1{
