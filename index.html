@@ -27,8 +27,7 @@
                   "left" : left +"px"
                 });
                     });
-        });
-        $(document).ready(function(){
+
             $('#btnJugar').mouseleave(function(){
             
             $('#pollitos').css({
@@ -36,8 +35,31 @@
                   "visibility": "hidden" //O lo que desees
                 });
                     });
+
+
+                    $('#btnConfig').mouseenter(function(){
+                var top = $('#btnJugar').position().top;
+                var left = $('#btnJugar').position().left;
+                
+                top -=-100
+                left += 340
+              
+            $('#lobito').css({
+                    
+                  "visibility": "visible", //O lo que desees
+                  "top" : top+"px",
+                  "left" : left +"px"
+                });
+                    });
+            $('#btnConfig').mouseleave(function(){
+            
+            $('#lobito').css({
+                 
+                  "visibility": "hidden" //O lo que desees
+                });
+                    });
+        
         });
-      
 
 
     </script>
@@ -57,7 +79,10 @@
                         <img id="pollitos" src="CSS/botonJugar.png" alt="botonJugar" height="150" width="150" >
                         <button id="btnJugar">Jugar</button>
                     </div>
+
                     <div>
+                        <img id="lobito" src="CSS/botonOpciones.png" alt="botonJugar" height="150" width="150" >
+                        
                         <button id="btnConfig">Configuraciones</button>
                     </div>
                     <div>
