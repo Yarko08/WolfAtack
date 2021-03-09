@@ -4,18 +4,12 @@ body{
     background-size: 110%;
 }
 #botones{
-   /* margin:10%;*/
-}
-#bannerNombre img{
-    background-image: url(nombrejuego.png);
-    margin-top: 5px;
-    width: 20%;
-    height: 40%;
+    margin:10%;
 }
 #btnJugar, #btnConfig, #btnPuntuaciones{
     border-radius: 10px;
     width: 35%;
-    margin: 5px;
+    margin: .8%;
     padding: 2%;
     font-size: 45px;
     font-weight: bolder;
