@@ -27,8 +27,7 @@
                   "left" : left +"px"
                 });
                     });
-        });
-        $(document).ready(function(){
+       
             $('#btnJugar').mouseleave(function(){
             
             $('#pollitos').css({
@@ -36,6 +35,18 @@
                   "visibility": "hidden" //O lo que desees
                 });
                     });
+
+               $('#btnJugar').click(function(){
+
+               window.location.href = "juego.html";
+
+               });
+
+                 $('#btnPuntuaciones').click(function(){
+
+               window.location.href = "Puntuaciones.html";
+
+               });
         });
       
 

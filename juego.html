@@ -1,0 +1,570 @@
+<html>
+<head>
+	
+	<title>2.3 Colisiones</title>
+	<style type="text/css">
+		.flex-container{
+		 display: flex;
+		}
+
+		.flex-child{
+			flex: 1;
+			border: 2px solid yellow;
+		}
+
+		.mPausa {
+            width: 30vw;
+            height: 40vh;
+            background-image: url(CSS/menus.png);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: 100;
+            position: fixed;
+            top: 10vh;
+            left: 25vw;
+            visibility: hidden;
+        }
+	
+	
+	</style>
+	<script type="text/javascript" src="js/jquery-3.5.1.min.js"></script> 
+	<script type="text/javascript" src="js/libs/three/three2.js"></script> 
+	<script type="text/javascript" src="js/libs/three/MTLLoader.js"></script> 
+	<script type="text/javascript" src="js/libs/three/FBXLoader.js"></script> 
+	<script type="text/javascript" src="js/libs/three/OBJLoader.js"></script>
+	<script type="text/javascript" src="js/libs/three/inflate.min.js"></script>  
+	<script type="text/javascript" src ="js/THREE.GamepadControls.js"></script>
+	<script type="text/javascript">
+
+			$(".btn-Retornar").click(function () {
+                $(".mPausa").css("visibility", "hidden");
+                pauseGame = false;
+            });
+
+
+            $(".btn-Menu").click(function () {
+                setTimeout(function () {
+                    window.location.href = 'index.html';
+                }, 1000);
+            });
+
+
+	var scene;
+	var camera;
+	var camera2;
+	var renderer;
+	var renderer2;
+	var controls;
+	var objs= [];
+	var objects = [];
+	var clock;
+	var deltaTime;	
+	var keys = {};
+	var rayCaster;
+	var isWorldReady = [ false, false,false ,false,false,false,false,false,false,false];
+	var pausa = false;
+	var mixers = [];
+	var mixers_2 = [];
+	var persona;
+	
+	$(document).ready(function() {
+			setupScene();
+		rayCaster = new THREE.Raycaster();
+
+
+		var loader = new THREE.FBXLoader();
+		loader.load("assets/pollitoExport1/pollitoCmueve2.fbx", model =>{
+			var mixer = new THREE.AnimationMixer(model);
+
+
+			model.position.z = -15;
+			model.rotation.x = THREE.Math.degToRad(-90);
+			model.position.x=-15;
+			model.position.y=0;
+			model.scale.set(.1,.1,.1);
+			var action = mixer.clipAction(model.animations[0]);
+
+			scene.add(model);
+			action.play();
+			action.setLoop(THREE.LoopOnce);
+			action.timeScale = 500;
+			objs.push({model,mixer});
+			model.name = "pollitofbx"
+				isWorldReady[6] = true;;
+			console.log("cargar pollito fbx terminado 6 ");
+
+
+		});
+
+	
+		/*loader.load("assets/pollitoExport1/pollitoCmueve.fbx", function (personaje){
+
+			personaje.mixer = new THREE.AnimationMixer(personaje);
+			mixers.push(personaje.mixer);
+
+			var action = personaje.mixer.clipAction(personaje.animations[0]);
+
+			action.play();
+
+			personaje.position.z = -15;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			personaje.position.x=-15;
+			personaje.position.y=0;
+			//object.scale.set(.1,.1,.1);
+			persona.position.set(personaje.position.x,2,personaje.position.z);
+
+			personaje.traverse(function (child){
+				if (child.isMesh){
+					child.castShadow = true;
+					child.receiveShadow = true;
+				}
+
+			});
+
+			scene.add(personaje);
+			persona.add(personaje);
+			//persona.add(camera);
+			scene.add(persona);
+
+				console.log("pollito fbx cargado");
+			isWorldReady[6] = true;
+		});*/
+
+		camera.misRayos = [
+			new THREE.Vector3(0,0,1),
+			new THREE.Vector3(0,0,-1),
+			new THREE.Vector3(1,0,0),
+			new THREE.Vector3(-1,0,0),
+			new THREE.Vector3(0,-1,0)
+		];
+		
+		var material = new THREE.MeshLambertMaterial({
+			color: new THREE.Color(0.5,0.0,0.0)
+		});
+		var geometry = new THREE.BoxGeometry(1,1,1);
+		var ancla = new THREE.Object3D();
+		var cubo  = new THREE.Mesh(geometry,material);
+			ancla.name="jugador1";
+			cubo.scale.set(5,5,5);
+			cubo.position.z=-10;
+			ancla.add(cubo);
+			scene.add(ancla);
+
+			var material2 = new THREE.MeshLambertMaterial({
+			color: new THREE.Color(0.0,0.0,0.5)
+		});
+			var geometry2 = new THREE.BoxGeometry(1,1,1);
+			var ancla2 = new THREE.Object3D();
+			var cubo2  = new THREE.Mesh(geometry2,material2);
+			ancla2.name="jugador2";
+			cubo2.scale.set(5,5,5);
+			cubo2.position.z=-10;
+			ancla2.add(cubo2);
+			scene.add(ancla2);
+			
+		loadOBJWithMTL("assets/", "box.obj", "box.mtl", (object) => {
+			object.position.z = -30;			
+
+		//	var box2 = object.clone();
+			
+
+			//scene.add(object);
+			
+			//scene.add(box3);
+		//	scene.add(box4);
+		//	scene.add(box5);
+		//	scene.add(box6);
+		//	scene.add(box7);
+		//	scene.add(box8);
+			
+			
+			console.log("boxx cargado 0");
+			isWorldReady[0] = true;
+		});
+
+	
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaGrande.obj", "dianaGrande.mtl", (object) => {
+			object.position.z = -10;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.scale.set(.1,.1,.1);
+
+			scene.add(object);
+			console.log("Diana grande cargado 1");
+			isWorldReady[1] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSobrePalito.obj", "dianaSobrePalito.mtl", (object) => {
+			object.position.z = -30;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=30;
+			object.scale.set(.1,.1,.1);
+
+			scene.add(object);
+			console.log("Diana sobre Palito cargado 2");
+			isWorldReady[2] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaCuerdita.obj", "dianaSolitaCuerdita.mtl", (object) => {
+			object.position.z = -30;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=-30;
+			object.position.y=5;
+			object.scale.set(.1,.1,.1);
+
+			scene.add(object);
+			console.log("diana solita cuerdita cargado 3");
+			isWorldReady[3] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaGancho.obj", "dianaSolitaGancho.mtl", (object) => {
+			object.position.z = -30;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=0;
+			object.position.y=5;
+			object.scale.set(.1,.1,.1);
+
+			scene.add(object);
+			console.log("diana solita gancho cargado 4"); 
+			isWorldReady[4] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaGancho.obj", "dianaSolitaGancho.mtl", (object) => {
+			object.position.z = 0;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=30;
+			object.position.y=0;
+			object.scale.set(.1,.1,.1);
+
+			scene.add(object);
+			isWorldReady[5] = true;
+			console.log("diana solita gancho x2 cargado 5");
+		});
+		loadOBJWithMTL("models/nuevosModelos/", "lobo.obj", "lobo.mtl", (object) => {
+			object.position.z = -15;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=15;
+			object.position.y=0;
+			object.scale.set(.1,.1,.1);
+
+			scene.add(object);
+			console.log("lobo cargado 7");
+			isWorldReady[7] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "pollo.obj", "pollo.mtl", (object) => {
+			object.position.z = -15;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=0;
+			object.position.y=0;
+			object.scale.set(.01,.01,.01);
+
+			scene.add(object);
+			console.log("pollo cargado 8");
+			isWorldReady[8] = true;
+		});
+
+	/*	loadOBJWithMTL("models/nuevosModelos/", "pollito.obj", "pollito.mtl", (object) => {
+			object.position.z = -15;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=-15;
+			object.position.y=0;
+			object.scale.set(.1,.1,.1);
+			scene.add(object);
+			isWorldReady[6] = true;
+		});*/
+
+		loadOBJWithMTL("models/nuevosModelos/", "escenarioFull.obj", "escenarioFull.mtl", (object) => {
+			object.position.z = -0;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=0;
+			object.position.y=-1;
+			object.scale.set(.1,.1,.1);
+			scene.add(object);
+			console.log("el escenario completo cargado 9");
+			objects.push(object);
+			isWorldReady[9] = true;
+		});
+
+		render();
+
+		document.addEventListener('keydown', onKeyDown);
+		document.addEventListener('keyup', onKeyUp);		
+	});
+
+	function loadOBJWithMTL(path, objFile, mtlFile, onLoadCallback) {
+		var mtlLoader = new THREE.MTLLoader();
+		mtlLoader.setPath(path);
+		mtlLoader.load(mtlFile, (materials) => {
+			
+			var objLoader = new THREE.OBJLoader();
+			objLoader.setMaterials(materials);
+			objLoader.setPath(path);
+			objLoader.load(objFile, (object) => {
+				onLoadCallback(object);
+			});
+
+		});
+	}
+
+	window.addEventListener("gamepadconnected", function (e) {
+                var gp = navigator.getGamepads()[e.gamepad.index];
+                console.log("Gamepad connected at index " + gp.index + ": " + gp.id + ". It has " + gp.buttons.length + " buttons and " + gp.axes.length + " axes.");
+            });
+
+            window.addEventListener("gamepaddisconnected", function () {
+                console.log("Waiting for gamepad.");
+            });
+	function onKeyDown(event) {
+		keys[String.fromCharCode(event.keyCode)] = true;
+	}
+	function onKeyUp(event) {
+		keys[String.fromCharCode(event.keyCode)] = false;
+	}
+
+	
+	function render() {
+		 const gamepads = navigator.getGamepads();
+            if (gamepads[0]) {
+                const gamepadState = {
+                    id: gamepads[0].id,
+                    axes: [
+                        gamepads[0].axes[0].toFixed(2),
+                        gamepads[0].axes[1].toFixed(2),
+                        gamepads[0].axes[2].toFixed(2),
+                        gamepads[0].axes[3].toFixed(2),
+                    ],
+                    buttons: [
+                        { buttons_0: gamepads[0].buttons[12].pressed },
+                        { buttons_0: gamepads[0].buttons[13].pressed },
+                        { buttons_0: gamepads[0].buttons[14].pressed },
+                        { buttons_0: gamepads[0].buttons[15].pressed },
+                        { buttons_0: gamepads[0].buttons[9].pressed },
+                        { buttons_0: gamepads[0].buttons[8].pressed },//start
+                    ],
+                }
+            }
+
+		requestAnimationFrame(render);
+
+		deltaTime = clock.getDelta();	
+		var cubo = scene.getObjectByName("jugador1");
+		var cubo2 = scene.getObjectByName("jugador2");
+		var yaw = 0;
+		var forward = 0;
+		var yaw2 = 0;
+		var forward2 = 0;
+		if(gamepads[0] != null){
+			
+
+  			if(gamepads[0].axes[2] >.001){
+
+  				//derecha derecha +, izquierda -
+  			}
+
+  			if(gamepads[0].axes[1] >.001){
+
+  				 // izquierda abajo +, arriba -
+  			}
+
+  			if(gamepads[0].axes[0] >.001){
+
+  			yaw = -5;//izqueirda derecha +, izquierda -
+  			}
+
+  			if(gamepads[0].axes[0] <-.001){
+
+  				yaw = 5;
+  			}
+
+
+  			if(gamepads[0].axes[3] >.001){
+
+  				forward = 20;// derecha abajo +, arriba -
+  			}
+
+  			if(gamepads[0].axes[3] <-.001){
+
+  				forward = -20;// derecha abajo +, arriba -
+  			}
+  		if (gamepads[0].buttons[9].pressed) {
+  			
+  			if(pausa)
+			{
+				pausa=false;
+				$(".mPausa").css("visibility", "hidden");
+			}
+			else
+			{
+				pausa =true;
+				$(".mPausa").css("visibility", "visible");
+			}
+		
+			keys["P"] = false;
+  		}};
+
+		if (keys["P"]) {
+			if(pausa  )
+			{
+				pausa=false;
+				$(".mPausa").css("visibility", "hidden");
+			}
+			else
+			{
+				pausa =true;
+				$(".mPausa").css("visibility", "visible");
+			}
+			gamepads[0].buttons[9].pressed = false;
+			keys["P"] = false;
+
+		}
+
+		if (keys["A"]) {
+		//	yaw = 5;
+		} else if (keys["D"]) {
+		//	yaw = -5;
+		}
+		if (keys["W"]) {
+		//	forward = -20;
+		} else if (keys["S"]) {
+		//	forward = 20;
+		}
+
+	
+		if (keys["J"]) {
+			yaw2 = 5;
+		} else if (keys["L"]) {
+			yaw2 = -5;
+		}
+		if (keys["I"]) {
+			forward2 = -20;
+		} else if (keys["K"]) {
+			forward2 = 20;
+		}
+
+
+
+		if (isWorldReady[0] && isWorldReady[1] && isWorldReady[2]
+		&& isWorldReady[3] && isWorldReady[4] && isWorldReady[5]
+		&& isWorldReady[6] && isWorldReady[7] && isWorldReady[8]
+		&& isWorldReady[9] && !pausa) {
+
+			//alert("termino");
+				/*if(mixers.length > 0){
+					for(var i=0; i<mixers.length; i++){
+						mixers[i].update(deltaTime);
+					}
+				}*/
+			
+				objs.forEach(({mixer}) => {mixer.update(deltaTime);});
+			//const controls = new THREE.OrbitControls( camera, renderer.domElement );
+			//controls.update();
+
+			camera.rotation.y += yaw * deltaTime;
+			camera.translateZ(forward * deltaTime);
+
+			cubo.rotation.y += yaw * deltaTime;
+			cubo.translateZ(forward * deltaTime);
+
+			camera2.rotation.y += yaw2 * deltaTime;
+			camera2.translateZ(forward2 * deltaTime);
+
+			cubo2.rotation.y += yaw2 * deltaTime;
+			cubo2.translateZ(forward2 * deltaTime);
+
+			for(var i = 0;i<camera.misRayos.length;i++){
+
+				var rayo =camera.misRayos[i];
+
+				rayCaster.set(camera.position,rayo);
+
+				var colisiones = rayCaster.intersectObjects(objects,true); // modelos y si sus hijos cuentan o no
+
+			}
+			
+			console.log(colisiones.length);
+			if(colisiones.length > 0){
+			
+				if (colisiones[0].distance < 1) {
+					
+					camera.translateZ-(forward * deltaTime);
+				}
+
+			}
+			//objs.forEach(({mixer}) => {mixer.update(clock.getDelta());});
+		}
+		
+		renderer.render(scene, camera);
+		renderer2.render(scene, camera2);
+	}
+
+	function setupScene() {		
+		var visibleSize = { width: window.innerWidth, height: window.innerHeight};
+		clock = new THREE.Clock();		
+		scene = new THREE.Scene();
+		camera = new THREE.PerspectiveCamera(75, visibleSize.width / visibleSize.height, 0.1, 10000);
+		camera2 = new THREE.PerspectiveCamera(75, visibleSize.width / visibleSize.height, 0.1, 10000);
+		camera.position.z = 2;
+		camera.position.y = 5;
+		camera2.position.z = 2;
+		camera2.position.y = 5;
+		//controls = new THREE.GamepadControls( camera );
+		renderer = new THREE.WebGLRenderer( {precision: "mediump" } );
+		renderer.setClearColor(new THREE.Color(0, 0, 0));
+		renderer.setPixelRatio((visibleSize.width/2) / (visibleSize.height));
+		renderer.setSize(visibleSize.width/2, visibleSize.height);
+
+		renderer2 = new THREE.WebGLRenderer( {precision: "mediump" } );
+		renderer2.setClearColor(new THREE.Color(0, 0, 0));
+		renderer2.setPixelRatio((visibleSize.width/2) / (visibleSize.height));
+		renderer2.setSize(visibleSize.width/2, visibleSize.height);
+
+
+		var geometry = new THREE.SphereGeometry(1000, 60, 40);
+		var material = new THREE.MeshBasicMaterial();
+		material.map = THREE.ImageUtils.loadTexture("designAttack/Sky.jpg");
+		material.side = THREE.BackSide;
+		var skydome = new THREE.Mesh(geometry, material);
+
+		scene.add(skydome);
+
+
+
+		var ambientLight = new THREE.AmbientLight(new THREE.Color(1, 1, 1), 1.0);
+		scene.add(ambientLight);
+
+		/*var directionalLight = new THREE.DirectionalLight(new THREE.Color(1, 1, 1), 0.4);
+		directionalLight.position.set(0, 0, 1);
+		scene.add(directionalLight);*/
+
+		var grid = new THREE.GridHelper(50, 10, 0xffffff, 0xffffff);
+		grid.position.y = -1;
+		scene.add(grid);
+
+		$("#scene-section").append(renderer.domElement);
+		$("#scene-section2").append(renderer2.domElement);
+	}
+
+
+	</script>
+</head>
+
+<body>
+	<div class =".flex-container" style="display: flex; height: 100px;">
+	<div style ="width: 49%; 	border: 2px solid yellow;" id="scene-section"/></div>
+	<div  style ="width: 49%; 	border: 2px solid yellow;" id="scene-section2"/></div>
+	<div class="mPausa">
+        <br>
+        <img src="CSS/nombreJuego.png" alt="nombresito" style="height: 135px; width: 135px;">
+        <h1 id="puntajeP1"></h1>
+        <br>
+        <br>
+        <button class="btn btn-Retornar">Continuar jugando</button>
+        <br>
+        <br>
+        <button class="btn btn-Menu">Regresar al menu principal</button>
+    </div>
+</div>
+</body>
+</html>
