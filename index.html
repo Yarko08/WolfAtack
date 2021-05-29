@@ -18,7 +18,7 @@
                 var left = $('#btnJugar').position().left;
                 
                 top -=33
-                left += 340
+                left += 251
               
             $('#pollitos').css({
                     
@@ -27,7 +27,7 @@
                   "left" : left +"px"
                 });
                     });
-
+       
             $('#btnJugar').mouseleave(function(){
             
             $('#pollitos').css({
@@ -36,30 +36,19 @@
                 });
                     });
 
+               $('#btnJugar').click(function(){
 
-                    $('#btnConfig').mouseenter(function(){
-                var top = $('#btnJugar').position().top;
-                var left = $('#btnJugar').position().left;
-                
-                top -=-100
-                left += 340
-              
-            $('#lobito').css({
-                    
-                  "visibility": "visible", //O lo que desees
-                  "top" : top+"px",
-                  "left" : left +"px"
-                });
-                    });
-            $('#btnConfig').mouseleave(function(){
-            
-            $('#lobito').css({
-                 
-                  "visibility": "hidden" //O lo que desees
-                });
-                    });
-        
+               window.location.href = "juego.html";
+
+               });
+
+                 $('#btnPuntuaciones').click(function(){
+
+               window.location.href = "Puntuaciones.html";
+
+               });
         });
+      
 
 
     </script>
@@ -68,21 +57,16 @@
 <body>
     <div class="Menu">
         <div id="contenedor">
-            
+            <div id="bannerNombre">
+            </div>
             <center>
-                <div id="bannerNombre" >
-                    <img src="CSS/nombreJuego.png">
-                </div>
                 <div id="botones">
                     
                     <div>
                         <img id="pollitos" src="CSS/botonJugar.png" alt="botonJugar" height="150" width="150" >
                         <button id="btnJugar">Jugar</button>
                     </div>
-
                     <div>
-                        <img id="lobito" src="CSS/botonOpciones.png" alt="botonJugar" height="150" width="150" >
-                        
                         <button id="btnConfig">Configuraciones</button>
                     </div>
                     <div>
