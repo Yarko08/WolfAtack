@@ -27,7 +27,7 @@
                   "left" : left +"px"
                 });
                     });
-
+       
             $('#btnJugar').mouseleave(function(){
             
             $('#pollitos').css({
@@ -36,29 +36,17 @@
                 });
                     });
 
+               $('#btnJugar').click(function(){
 
-                    $('#btnConfig').mouseenter(function(){
-                var top = $('#btnJugar').position().top;
-                var left = $('#btnJugar').position().left;
-                
-                top -=-100
-                left += 340
-              
-            $('#lobito').css({
-                    
-                  "visibility": "visible", //O lo que desees
-                  "top" : top+"px",
-                  "left" : left +"px"
-                });
-                    });
-            $('#btnConfig').mouseleave(function(){
-            
-            $('#lobito').css({
-                 
-                  "visibility": "hidden" //O lo que desees
-                });
-                    });
-        
+               window.location.href = "juego.html";
+
+               });
+
+                 $('#btnPuntuaciones').click(function(){
+
+               window.location.href = "Puntuaciones.html";
+
+               });
         });
 
 
