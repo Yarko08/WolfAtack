@@ -99,6 +99,7 @@
 
 	
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 		/*loader.load("assets/pollitoExport1/pollitoCmueve.fbx", function (personaje){
 
 			personaje.mixer = new THREE.AnimationMixer(personaje);
@@ -135,6 +136,9 @@
 =======
 	
 >>>>>>> Stashed changes
+=======
+	
+>>>>>>> Stashed changes
 		camera.misRayos = [
 			new THREE.Vector3(0,0,1),
 			new THREE.Vector3(0,0,-1),
@@ -151,7 +155,11 @@
 		var cubo  = new THREE.Mesh(geometry,material);
 			ancla.name="jugador1";
 			cubo.scale.set(5,5,5);
+<<<<<<< Updated upstream
 			cubo.position.z=-10;
+=======
+			//cubo.position.z=-10;
+>>>>>>> Stashed changes
 			ancla.add(cubo);
 			scene.add(ancla);
 
@@ -358,13 +366,19 @@
 		var yaw = 0;
 		var forward = 0;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 		var yaw2 = 0;
 		var forward2 = 0;
 =======
+=======
+>>>>>>> Stashed changes
 		
 		var yaw2 = 0;
 		var forward2 = 0;
 		var subir=0;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 		if(gamepads[0] != null){
 			
@@ -377,8 +391,11 @@
   			if(gamepads[0].axes[1] >.001){
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   				 // izquierda abajo +, arriba -
 =======
+=======
+>>>>>>> Stashed changes
   				 subir = -5;// izquierda abajo +, arriba -
   				
   			}
@@ -387,6 +404,9 @@
 
   				subir = 5; // izquierda abajo +, arriba -
   				
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   			}
 
@@ -404,7 +424,11 @@
   			if(gamepads[0].axes[3] >.001){
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   				forward = 20;// derecha abajo +, arriba -
+=======
+  				forward = -20;// derecha abajo +, arriba -
+>>>>>>> Stashed changes
 =======
   				forward = -20;// derecha abajo +, arriba -
 >>>>>>> Stashed changes
@@ -413,7 +437,11 @@
   			if(gamepads[0].axes[3] <-.001){
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   				forward = -20;// derecha abajo +, arriba -
+=======
+  				forward = 20;// derecha abajo +, arriba -
+>>>>>>> Stashed changes
 =======
   				forward = 20;// derecha abajo +, arriba -
 >>>>>>> Stashed changes
@@ -452,10 +480,13 @@
 
 		if (keys["A"]) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 		//	yaw = 5;
 		} else if (keys["D"]) {
 		//	yaw = -5;
 =======
+=======
+>>>>>>> Stashed changes
 
 		let vector = new THREE.Vector3();
 			camera.getWorldDirection( vector );
@@ -466,10 +497,17 @@
 		} else if (keys["D"]) {
 	alert("RX  = " + camera.rotation.x +  "   RY  = " + camera.rotation.y +"  RZ  = " + camera.rotation.z);
 	keys["D"]=false;
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes
 		}
 		if (keys["W"]) {
 		//	forward = -20;
+=======
+		}
+		if (keys["W"]) {
+		alert("pX  = " + camera.position.x +  "  pY  = " + camera.position.y +"  pZ  = " + camera.position.z);
+		keys["W"]=false;
+>>>>>>> Stashed changes
 		} else if (keys["S"]) {
 		//	forward = 20;
 		}
@@ -494,6 +532,7 @@
 		&& isWorldReady[9] && !pausa) {
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 			//alert("termino");
 				/*if(mixers.length > 0){
 					for(var i=0; i<mixers.length; i++){
@@ -511,6 +550,8 @@
 			cubo.rotation.y += yaw * deltaTime;
 			cubo.translateZ(forward * deltaTime);
 =======
+=======
+>>>>>>> Stashed changes
 		
 				let vector = new THREE.Vector3();
 				
@@ -527,10 +568,25 @@
 				camera.getWorldDirection( vector );
 
 
+<<<<<<< Updated upstream
 				var cosox = camera.rotation.x;
 				var cosoz = camera.rotation.z;
 				camera.rotation.x=-vector.x;
 				camera.rotation.z=-vector.z;
+=======
+
+			const myAxis = new THREE.Vector3(0,1, 0);
+// rotate the mesh 45 on this axis
+			camera.rotateOnWorldAxis(myAxis, yaw * deltaTime);
+			cubo.rotateOnWorldAxis(myAxis, yaw * deltaTime);
+/*var cosox = camera.rotation.x;
+				var cosoz = camera.rotation.z;
+				camera.rotation.x=-vector.x;
+				camera.rotation.z=-vector.z;
+
+
+				if(subir ==0)
+>>>>>>> Stashed changes
 			if (vector.z <0){
 			camera.rotation.y += yaw * deltaTime;
 			cubo.rotation.y += yaw * deltaTime;
@@ -544,7 +600,14 @@
 		}
 
 		camera.rotation.x=cosox;
+<<<<<<< Updated upstream
 		camera.rotation.z=cosoz;
+=======
+		camera.rotation.z=cosoz;*/
+
+		//camera.rotateY(yaw * deltaTime);
+
+>>>>>>> Stashed changes
 
 				
 				camera.rotateX(subir * deltaTime);
@@ -562,6 +625,9 @@
 			
 		
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 			camera2.rotation.y += yaw2 * deltaTime;
@@ -602,8 +668,13 @@
 		scene = new THREE.Scene();
 		camera = new THREE.PerspectiveCamera(75, visibleSize.width / visibleSize.height, 0.1, 10000);
 		camera2 = new THREE.PerspectiveCamera(75, visibleSize.width / visibleSize.height, 0.1, 10000);
+<<<<<<< Updated upstream
 		camera.position.z = 2;
 		camera.position.y = 5;
+=======
+		//camera.position.z = 2;
+	//	camera.position.y = 5;
+>>>>>>> Stashed changes
 		camera2.position.z = 2;
 		camera2.position.y = 5;
 		//controls = new THREE.GamepadControls( camera );
