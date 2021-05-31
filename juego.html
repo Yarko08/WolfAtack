@@ -98,7 +98,6 @@
 		});
 
 	
-<<<<<<< Updated upstream
 		/*loader.load("assets/pollitoExport1/pollitoCmueve.fbx", function (personaje){
 
 			personaje.mixer = new THREE.AnimationMixer(personaje);
@@ -132,9 +131,6 @@
 			isWorldReady[6] = true;
 		});*/
 
-=======
-	
->>>>>>> Stashed changes
 		camera.misRayos = [
 			new THREE.Vector3(0,0,1),
 			new THREE.Vector3(0,0,-1),
@@ -357,15 +353,8 @@
 		var cubo2 = scene.getObjectByName("jugador2");
 		var yaw = 0;
 		var forward = 0;
-<<<<<<< Updated upstream
 		var yaw2 = 0;
 		var forward2 = 0;
-=======
-		
-		var yaw2 = 0;
-		var forward2 = 0;
-		var subir=0;
->>>>>>> Stashed changes
 		if(gamepads[0] != null){
 			
 
@@ -376,18 +365,7 @@
 
   			if(gamepads[0].axes[1] >.001){
 
-<<<<<<< Updated upstream
   				 // izquierda abajo +, arriba -
-=======
-  				 subir = -5;// izquierda abajo +, arriba -
-  				
-  			}
-
-  			if(gamepads[0].axes[1] <-.001){
-
-  				subir = 5; // izquierda abajo +, arriba -
-  				
->>>>>>> Stashed changes
   			}
 
   			if(gamepads[0].axes[0] >.001){
@@ -403,20 +381,12 @@
 
   			if(gamepads[0].axes[3] >.001){
 
-<<<<<<< Updated upstream
   				forward = 20;// derecha abajo +, arriba -
-=======
-  				forward = -20;// derecha abajo +, arriba -
->>>>>>> Stashed changes
   			}
 
   			if(gamepads[0].axes[3] <-.001){
 
-<<<<<<< Updated upstream
   				forward = -20;// derecha abajo +, arriba -
-=======
-  				forward = 20;// derecha abajo +, arriba -
->>>>>>> Stashed changes
   			}
   		if (gamepads[0].buttons[9].pressed) {
   			
@@ -451,22 +421,9 @@
 		}
 
 		if (keys["A"]) {
-<<<<<<< Updated upstream
 		//	yaw = 5;
 		} else if (keys["D"]) {
 		//	yaw = -5;
-=======
-
-		let vector = new THREE.Vector3();
-			camera.getWorldDirection( vector );
-
-			alert("X  = " + vector.x +  "   Y  = " + vector.y +"  Z  = " + vector.z);
-
-			keys["A"]=false;
-		} else if (keys["D"]) {
-	alert("RX  = " + camera.rotation.x +  "   RY  = " + camera.rotation.y +"  RZ  = " + camera.rotation.z);
-	keys["D"]=false;
->>>>>>> Stashed changes
 		}
 		if (keys["W"]) {
 		//	forward = -20;
@@ -493,7 +450,6 @@
 		&& isWorldReady[6] && isWorldReady[7] && isWorldReady[8]
 		&& isWorldReady[9] && !pausa) {
 
-<<<<<<< Updated upstream
 			//alert("termino");
 				/*if(mixers.length > 0){
 					for(var i=0; i<mixers.length; i++){
@@ -510,59 +466,6 @@
 
 			cubo.rotation.y += yaw * deltaTime;
 			cubo.translateZ(forward * deltaTime);
-=======
-		
-				let vector = new THREE.Vector3();
-				
-				objs.forEach(({mixer}) => {mixer.update(deltaTime);});
-			
-				camera.getWorldDirection( vector );
-
-			camera.position.x += vector.x * forward * deltaTime;
-			camera.position.z += vector.z * forward * deltaTime;
-
-			cubo.position.x += vector.x * forward * deltaTime;
-			cubo.position.z += vector.z * forward * deltaTime;
-
-				camera.getWorldDirection( vector );
-
-
-				var cosox = camera.rotation.x;
-				var cosoz = camera.rotation.z;
-				camera.rotation.x=-vector.x;
-				camera.rotation.z=-vector.z;
-			if (vector.z <0){
-			camera.rotation.y += yaw * deltaTime;
-			cubo.rotation.y += yaw * deltaTime;
-
-
-		}
-		else{
-			camera.rotation.y += -yaw * deltaTime;
-			cubo.rotation.y += -yaw * deltaTime;
-
-		}
-
-		camera.rotation.x=cosox;
-		camera.rotation.z=cosoz;
-
-				
-				camera.rotateX(subir * deltaTime);
-				cubo.rotateX(subir * deltaTime);
-				camera.getWorldDirection( vector );
-				if(vector.y < -0.9 || vector.y >0.9){
-				camera.rotateX(-subir * deltaTime);
-				cubo.rotateX(-subir * deltaTime);
-			}
-
-			
-
-
-			
-			
-		
-
->>>>>>> Stashed changes
 
 			camera2.rotation.y += yaw2 * deltaTime;
 			camera2.translateZ(forward2 * deltaTime);
