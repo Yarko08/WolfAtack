@@ -319,49 +319,59 @@
 		deltaTime = clock.getDelta();	
 		var cubo = scene.getObjectByName("jugador1");
 		var cubo2 = scene.getObjectByName("jugador2");
+
 		var yaw = 0;
 		var forward = 0;
+		var subir=0;
+		var lados = 0;
 		
 		var yaw2 = 0;
 		var forward2 = 0;
-		var subir=0;
+		
 		if(gamepads[0] != null){
 			
 
-  			if(gamepads[0].axes[2] >.001){
+  			if(gamepads[0].axes[2] >.9){
 
-  				//derecha derecha +, izquierda -
+  				lados = 20;
   			}
 
-  			if(gamepads[0].axes[1] >.001){
 
-  				 subir = -5;// izquierda abajo +, arriba -
+  			if(gamepads[0].axes[2] <-.9){
+
+  				lados = -20;  //derecha derecha +, izquierda -
+  			}
+
+
+  			if(gamepads[0].axes[1] >.9){
+
+  				 subir = -3;// izquierda abajo +, arriba -
   				
   			}
 
-  			if(gamepads[0].axes[1] <-.001){
+  			if(gamepads[0].axes[1] <-.9){
 
-  				subir = 5; // izquierda abajo +, arriba -
+  				subir = 3; // izquierda abajo +, arriba -
   				
   			}
 
-  			if(gamepads[0].axes[0] >.001){
+  			if(gamepads[0].axes[0] >.9){
 
   			yaw = -5;//izqueirda derecha +, izquierda -
   			}
 
-  			if(gamepads[0].axes[0] <-.001){
+  			if(gamepads[0].axes[0] <-.9){
 
   				yaw = 5;
   			}
 
 
-  			if(gamepads[0].axes[3] >.001){
+  			if(gamepads[0].axes[3] >.9){
 
   				forward = -20;// derecha abajo +, arriba -
   			}
 
-  			if(gamepads[0].axes[3] <-.001){
+  			if(gamepads[0].axes[3] <-.9){
 
   				forward = 20;// derecha abajo +, arriba -
   			}
@@ -442,11 +452,29 @@
 			
 				camera.getWorldDirection( vector );
 
-			camera.position.x += vector.x * forward * deltaTime;
-			camera.position.z += vector.z * forward * deltaTime;
+				camera.position.x += vector.x * forward * deltaTime;
+				camera.position.z += vector.z * forward * deltaTime;
 
-			cubo.position.x += vector.x * forward * deltaTime;
-			cubo.position.z += vector.z * forward * deltaTime;
+
+				cubo.position.x += vector.x * forward * deltaTime;
+				cubo.position.z += vector.z * forward * deltaTime;
+
+
+				camera.getWorldDirection( vector );
+
+
+				camera.translateX(lados*deltaTime);
+				cubo.translateX(lados*deltaTime);
+				//camera.position.z += vector.z * lados * deltaTime;
+
+				
+				//cubo.position.y += vector.y * lados * deltaTime;
+				//cubo.position.x += vector.x * lados * deltaTime;
+
+
+
+
+			
 
 				camera.getWorldDirection( vector );
 
