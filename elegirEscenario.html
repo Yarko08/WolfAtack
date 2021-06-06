@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wolf Attack</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Akaya+Kanadaka&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="CSS//elecciones.css">
+    <script type="text/javascript" src="js/jquery-3.5.1.min.js"></script> 
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#granja').click(function(){
+                window.location.href = "juego.html?id=1";
+            });
+            $('#castillo').click(function(){
+                window.location.href = "juego.html?id=2";
+            });
+            $('#Bosque').click(function(){
+                window.location.href = "juego.html?id=3";
+            });
+            $('#btnVolver').click(function(){
+                window.location.href = "index.html";
+            });
+        });
+    </script>
+
+</head>
+<body>
+    <div id="botones">
+        <center>
+            <p id="elegir">Elija un escenario</p>
+            <button id="granja" class="btn">Granja</button>
+            <br>
+            <button id="castillo" class="btn">Castillo</button>
+            <br>
+            <button id="Bosque" class="btn">Bosque</button>
+        </center>
+        <button id="btnVolver">Regresar</button>
+    </div>
+</body>
+</html>
