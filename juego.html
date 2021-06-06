@@ -98,7 +98,39 @@
 		});
 
 	
-	
+		/*loader.load("assets/pollitoExport1/pollitoCmueve.fbx", function (personaje){
+
+			personaje.mixer = new THREE.AnimationMixer(personaje);
+			mixers.push(personaje.mixer);
+
+			var action = personaje.mixer.clipAction(personaje.animations[0]);
+
+			action.play();
+
+			personaje.position.z = -15;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			personaje.position.x=-15;
+			personaje.position.y=0;
+			//object.scale.set(.1,.1,.1);
+			persona.position.set(personaje.position.x,2,personaje.position.z);
+
+			personaje.traverse(function (child){
+				if (child.isMesh){
+					child.castShadow = true;
+					child.receiveShadow = true;
+				}
+
+			});
+
+			scene.add(personaje);
+			persona.add(personaje);
+			//persona.add(camera);
+			scene.add(persona);
+
+				console.log("pollito fbx cargado");
+			isWorldReady[6] = true;
+		});*/
+
 		camera.misRayos = [
 			new THREE.Vector3(0,0,1),
 			new THREE.Vector3(0,0,-1),
@@ -115,7 +147,7 @@
 		var cubo  = new THREE.Mesh(geometry,material);
 			ancla.name="jugador1";
 			cubo.scale.set(5,5,5);
-			//cubo.position.z=-10;
+			cubo.position.z=-10;
 			ancla.add(cubo);
 			scene.add(ancla);
 
@@ -319,61 +351,42 @@
 		deltaTime = clock.getDelta();	
 		var cubo = scene.getObjectByName("jugador1");
 		var cubo2 = scene.getObjectByName("jugador2");
-
 		var yaw = 0;
 		var forward = 0;
-		var subir=0;
-		var lados = 0;
-		
 		var yaw2 = 0;
 		var forward2 = 0;
-		
 		if(gamepads[0] != null){
 			
 
-  			if(gamepads[0].axes[2] >.9){
+  			if(gamepads[0].axes[2] >.001){
 
-  				lados = 20;
+  				//derecha derecha +, izquierda -
   			}
 
+  			if(gamepads[0].axes[1] >.001){
 
-  			if(gamepads[0].axes[2] <-.9){
-
-  				lados = -20;  //derecha derecha +, izquierda -
+  				 // izquierda abajo +, arriba -
   			}
 
-
-  			if(gamepads[0].axes[1] >.9){
-
-  				 subir = -3;// izquierda abajo +, arriba -
-  				
-  			}
-
-  			if(gamepads[0].axes[1] <-.9){
-
-  				subir = 3; // izquierda abajo +, arriba -
-  				
-  			}
-
-  			if(gamepads[0].axes[0] >.9){
+  			if(gamepads[0].axes[0] >.001){
 
   			yaw = -5;//izqueirda derecha +, izquierda -
   			}
 
-  			if(gamepads[0].axes[0] <-.9){
+  			if(gamepads[0].axes[0] <-.001){
 
   				yaw = 5;
   			}
 
 
-  			if(gamepads[0].axes[3] >.9){
-
-  				forward = -20;// derecha abajo +, arriba -
-  			}
-
-  			if(gamepads[0].axes[3] <-.9){
+  			if(gamepads[0].axes[3] >.001){
 
   				forward = 20;// derecha abajo +, arriba -
+  			}
+
+  			if(gamepads[0].axes[3] <-.001){
+
+  				forward = -20;// derecha abajo +, arriba -
   			}
   		if (gamepads[0].buttons[9].pressed) {
   			
@@ -408,20 +421,12 @@
 		}
 
 		if (keys["A"]) {
-
-		let vector = new THREE.Vector3();
-			camera.getWorldDirection( vector );
-
-			alert("X  = " + vector.x +  "   Y  = " + vector.y +"  Z  = " + vector.z);
-
-			keys["A"]=false;
+		//	yaw = 5;
 		} else if (keys["D"]) {
-	alert("RX  = " + camera.rotation.x +  "   RY  = " + camera.rotation.y +"  RZ  = " + camera.rotation.z);
-	keys["D"]=false;
+		//	yaw = -5;
 		}
 		if (keys["W"]) {
-		alert("pX  = " + camera.position.x +  "  pY  = " + camera.position.y +"  pZ  = " + camera.position.z);
-		keys["W"]=false;
+		//	forward = -20;
 		} else if (keys["S"]) {
 		//	forward = 20;
 		}
@@ -445,86 +450,22 @@
 		&& isWorldReady[6] && isWorldReady[7] && isWorldReady[8]
 		&& isWorldReady[9] && !pausa) {
 
-		
-				let vector = new THREE.Vector3();
-				
+			//alert("termino");
+				/*if(mixers.length > 0){
+					for(var i=0; i<mixers.length; i++){
+						mixers[i].update(deltaTime);
+					}
+				}*/
+			
 				objs.forEach(({mixer}) => {mixer.update(deltaTime);});
-			
-				camera.getWorldDirection( vector );
+			//const controls = new THREE.OrbitControls( camera, renderer.domElement );
+			//controls.update();
 
-				camera.position.x += vector.x * forward * deltaTime;
-				camera.position.z += vector.z * forward * deltaTime;
-
-
-				cubo.position.x += vector.x * forward * deltaTime;
-				cubo.position.z += vector.z * forward * deltaTime;
-
-
-				camera.getWorldDirection( vector );
-
-
-				camera.translateX(lados*deltaTime);
-				cubo.translateX(lados*deltaTime);
-				//camera.position.z += vector.z * lados * deltaTime;
-
-				
-				//cubo.position.y += vector.y * lados * deltaTime;
-				//cubo.position.x += vector.x * lados * deltaTime;
-
-
-
-
-			
-
-				camera.getWorldDirection( vector );
-
-
-
-			const myAxis = new THREE.Vector3(0,1, 0);
-// rotate the mesh 45 on this axis
-			camera.rotateOnWorldAxis(myAxis, yaw * deltaTime);
-			cubo.rotateOnWorldAxis(myAxis, yaw * deltaTime);
-/*var cosox = camera.rotation.x;
-				var cosoz = camera.rotation.z;
-				camera.rotation.x=-vector.x;
-				camera.rotation.z=-vector.z;
-
-
-				if(subir ==0)
-			if (vector.z <0){
 			camera.rotation.y += yaw * deltaTime;
+			camera.translateZ(forward * deltaTime);
+
 			cubo.rotation.y += yaw * deltaTime;
-
-
-		}
-		else{
-			camera.rotation.y += -yaw * deltaTime;
-			cubo.rotation.y += -yaw * deltaTime;
-
-		}
-
-		camera.rotation.x=cosox;
-		camera.rotation.z=cosoz;*/
-
-		//camera.rotateY(yaw * deltaTime);
-
-
-				
-				camera.rotateX(subir * deltaTime);
-				cubo.rotateX(subir * deltaTime);
-				camera.getWorldDirection( vector );
-				if(vector.y < -0.9 || vector.y >0.9){
-				camera.rotateX(-subir * deltaTime);
-				cubo.rotateX(-subir * deltaTime);
-			}
-
-			
-
-
-			
-			
-		
-
+			cubo.translateZ(forward * deltaTime);
 
 			camera2.rotation.y += yaw2 * deltaTime;
 			camera2.translateZ(forward2 * deltaTime);
@@ -564,8 +505,8 @@
 		scene = new THREE.Scene();
 		camera = new THREE.PerspectiveCamera(75, visibleSize.width / visibleSize.height, 0.1, 10000);
 		camera2 = new THREE.PerspectiveCamera(75, visibleSize.width / visibleSize.height, 0.1, 10000);
-		//camera.position.z = 2;
-	//	camera.position.y = 5;
+		camera.position.z = 2;
+		camera.position.y = 5;
 		camera2.position.z = 2;
 		camera2.position.y = 5;
 		//controls = new THREE.GamepadControls( camera );

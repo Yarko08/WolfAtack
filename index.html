@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Wolf Attack</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Akaya+Kanadaka&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="CSS//index.css">
@@ -18,7 +18,7 @@
                 var left = $('#btnJugar').position().left;
                 
                 top -=33
-                left += 340
+                left += 251
               
             $('#pollitos').css({
                     
@@ -36,18 +36,22 @@
                 });
                     });
 
-               $('#btnJugar').click(function(){
+                $('#btnJugar').click(function(){
+                    window.location.href = "elegirEscenario.html";
+                    //window.location.href = "juego.html";
+                });
 
-               window.location.href = "juego.html";
+                $('#btnConfig').click(function(){
+                    window.location.href = "Configuracion.html";
+                });
 
-               });
-
-                 $('#btnPuntuaciones').click(function(){
+                $('#btnPuntuaciones').click(function(){
 
                window.location.href = "Puntuaciones.html";
 
                });
         });
+      
 
 
     </script>
@@ -56,21 +60,16 @@
 <body>
     <div class="Menu">
         <div id="contenedor">
-            
+            <div id="bannerNombre">
+            </div>
             <center>
-                <div id="bannerNombre" >
-                    <img src="CSS/nombreJuego.png">
-                </div>
                 <div id="botones">
                     
                     <div>
                         <img id="pollitos" src="CSS/botonJugar.png" alt="botonJugar" height="150" width="150" >
                         <button id="btnJugar">Jugar</button>
                     </div>
-
                     <div>
-                        <img id="lobito" src="CSS/botonOpciones.png" alt="botonJugar" height="150" width="150" >
-                        
                         <button id="btnConfig">Configuraciones</button>
                     </div>
                     <div>
