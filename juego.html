@@ -61,9 +61,7 @@
             		this.modelo=modelo;
             		this.nombre=nombre;
 					this.reloj  = new THREE.Clock();
-					this.id = id;
             			}
-
 
             	agregarProyectil(posicion,vector){
             		
@@ -86,29 +84,120 @@
             	ActualizarProyectiles(){
 
             		for(var i=0;i<this.nombresProyectil.length;i++){
-					
+				
 					var objeto = scene.getObjectByName(this.nombresProyectil[i]);
 					objeto.position.x += this.VectorProyectil[i].x * this.speed;
 					objeto.position.y += this.VectorProyectil[i].y * this.speed;
 					objeto.position.z += this.VectorProyectil[i].z * this.speed;
+
+					this.PosicionProyectil[i].x = objeto.position.x;
+					this.PosicionProyectil[i].z = objeto.position.z;
+					this.PosicionProyectil[i].y = objeto.position.y;
+
+
+
 					objeto.rotation.x += this.speed;
 					objeto.rotation.z += this.speed;
-
 					if(objeto.position.distanceTo(this.PosicionProyectil[i])>100){
-
 						scene.remove(objeto);
 						this.VectorProyectil.splice(i, 1);
 						this.nombresProyectil.splice(i, 1);
 						this.PosicionProyectil.splice(i, 1);
 						i--;
-						
-
             		}
             	}	
             	}
+
+
+            	buscarproyectil(objetivos){
+            		for(var i=0;i<this.PosicionProyectil.length;i++){
+            			for(var j=0;j<objetivos.Posiciionobjetivo.length;j++){
+            				var distancia =this.PosicionProyectil[i].distanceTo(objetivos.Posiciionobjetivo[j]);
+            				if(distancia < 10){
+            					if(this.id==1){
+            						puntuacion1+=100;
+            						
+
+            					}
+            					else{
+            						puntuacion2+=100;
+
+            					}
+            					
+            					objetivos.Objetivodado(j);
+            						var objeto = scene.getObjectByName(this.nombresProyectil[i]);
+            						scene.remove(objeto);
+									this.VectorProyectil.splice(i, 1);
+									this.nombresProyectil.splice(i, 1);
+									this.PosicionProyectil.splice(i, 1);
+
+            				}
+            			}
+            		}
+            	}
             	}	
 
+            class classobjetivos {
+            	cantidad = 0;
+            	Posiciionobjetivo = new Array();
+            	tamaobjetivo = new Array();
+            	nombreobjetivo = new Array();
 
+            	tiempoenaparecer = new Array();
+            	nombreenaparecer = new Array();
+            	posicionaparecer = new Array();
+            	tamaobjetivoaparecer = new Array();
+            	Agregar(posision,tamano,modelo){
+            		this.Posiciionobjetivo.push(posision);
+            		this.tamaobjetivo.push(tamano);
+            		modelo.name ="Objetivo"+this.cantidad;
+            		this.nombreobjetivo.push(modelo.name);
+            		modelo.position.x = posision.x;
+            		modelo.position.y = posision.y;
+            		modelo.position.z = posision.z;
+            		scene.add(modelo);
+            		this.cantidad++;
+            	}
+            	ActualizarObjetivos(){
+            		for(var i=0;i<this.tiempoenaparecer.length;i++){
+            			if(this.tiempoenaparecer[i].getElapsedTime() >2){
+
+            		this.nombreobjetivo.push(this.nombreenaparecer[i]);
+            		this.tamaobjetivo.push(this.tamaobjetivoaparecer[i]);
+            		this.Posiciionobjetivo.push(this.posicionaparecer[i]);
+            	
+
+            		var objeto = scene.getObjectByName(this.nombreenaparecer[i]);
+            		objeto.visible = true;
+
+            			this.tamaobjetivoaparecer.push(new THREE.Clock()); 	
+            			this.nombreenaparecer.splice(i, 1);
+						this.posicionaparecer.splice(i, 1);
+						this.tiempoenaparecer.splice(i, 1);
+
+            			}
+
+            		}
+
+            	}
+
+            	Objetivodado(id){
+            		this.nombreenaparecer.push(this.nombreobjetivo[id]);
+            		this.tamaobjetivoaparecer.push(this.tamaobjetivo[id]);
+            		this.posicionaparecer.push(this.Posiciionobjetivo[id]);
+            		this.tiempoenaparecer.push(new THREE.Clock()); 	
+
+            		var objeto = scene.getObjectByName(this.nombreobjetivo[id]);
+            		objeto.visible = false;
+
+            			this.nombreobjetivo.splice(id, 1);
+						this.tamaobjetivo.splice(id, 1);
+						this.Posiciionobjetivo.splice(id, 1);
+						
+
+
+            	}
+            }
             
 			function MovimientosJugador( camara,  objeto,  foward, yaw, lados,subir,jugador) {
 
@@ -156,10 +245,6 @@
 				camara.rotateX(-subir * deltaTime);
 				//objeto.rotateOnAxis(myAxis2,subir * deltaTime);
 			}
-
-			
-
-
 }
 
 	var scene;
@@ -173,6 +258,9 @@
 
 	var proyectiles;
 	var proyectiles2;
+	var puntuacion1=0;
+	var puntuacion2=0;
+	var objetivos = new classobjetivos();
 
 	var clock;
 	var deltaTime;	
@@ -249,8 +337,8 @@
 			object.position.z = -10;
 			//object.rotation.x = THREE.Math.degToRad(-90);
 			object.scale.set(.1,.1,.1);
-
-			scene.add(object);
+			objetivos.Agregar(object.position,1,object);
+			//scene.add(object);
 			console.log("Diana grande cargado 1");
 			isWorldReady[1] = true;
 		});
@@ -260,8 +348,8 @@
 			//object.rotation.x = THREE.Math.degToRad(-90);
 			object.position.x=30;
 			object.scale.set(.1,.1,.1);
-
-			scene.add(object);
+			objetivos.Agregar(object.position,1,object);
+			//scene.add(object);
 			console.log("Diana sobre Palito cargado 2");
 			isWorldReady[2] = true;
 		});
@@ -273,7 +361,7 @@
 			object.position.y=5;
 			object.scale.set(.1,.1,.1);
 			proyectiles = new classproyectiles(object,"Jugador1",1);
-			scene.add(object);
+			//scene.add(object);
 			console.log("diana solita cuerdita cargado 3");
 			isWorldReady[3] = true;
 		});
@@ -284,8 +372,8 @@
 			object.position.x=0;
 			object.position.y=5;
 			object.scale.set(.1,.1,.1);
-
-			scene.add(object);
+			objetivos.Agregar(object.position,1,object);
+			
 			console.log("diana solita gancho cargado 4"); 
 			isWorldReady[4] = true;
 		});
@@ -297,7 +385,7 @@
 			object.position.y=0;
 			object.scale.set(.1,.1,.1);
 
-			scene.add(object);
+			//scene.add(object);
 			isWorldReady[5] = true;
 			console.log("diana solita gancho x2 cargado 5");
 		});
@@ -333,7 +421,7 @@
 			object.position.y=0;
 			object.scale.set(.01,.01,.01);
 			proyectiles2 = new classproyectiles(object,"Jugador2",2);
-			scene.add(object);
+			//scene.add(object);
 			console.log("pollo cargado 8");
 			isWorldReady[8] = true;
 		});
@@ -437,7 +525,7 @@
 		var forward2 = 0;
 		var lados2 = 0;
 		var subir2 = 0;
-		
+		if(!pausa){
 		if(gamepads[0] != null){
 			
 
@@ -558,7 +646,6 @@
   				let vector2 = new THREE.Vector3();
   				camera.getWorldDirection( vector );
   				camera.getWorldPosition ( vector2 );
-  			
   				proyectiles2.agregarProyectil(vector2,vector);
 		}
 
@@ -567,7 +654,7 @@
 		if (isWorldReady[1] && isWorldReady[2]
 		&& isWorldReady[3] && isWorldReady[4] && isWorldReady[5]
 		&& isWorldReady[6] && isWorldReady[7] && isWorldReady[8]
-		&& isWorldReady[9] && !pausa) {
+		&& isWorldReady[9]) {
 
 		
 			/*MovimientosJugador( camara,  objeto,  foward, yaw, lados,subir)*/
@@ -583,6 +670,9 @@
  			
 			proyectiles.ActualizarProyectiles();
 			proyectiles2.ActualizarProyectiles();
+			proyectiles.buscarproyectil(objetivos);
+			proyectiles2.buscarproyectil(objetivos);
+			objetivos.ActualizarObjetivos();
 
 
 			/*camera2.rotation.y += yaw2 * deltaTime;
@@ -612,7 +702,7 @@
 			}
 			//objs.forEach(({mixer}) => {mixer.update(clock.getDelta());});
 		}
-		
+		}
 		renderer.render(scene, camera);
 		renderer2.render(scene, camera2);
 	}
