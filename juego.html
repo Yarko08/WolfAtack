@@ -35,6 +35,7 @@
 	<script type="text/javascript" src="js/libs/three/OBJLoader.js"></script>
 	<script type="text/javascript" src="js/libs/three/inflate.min.js"></script>  
 	<script type="text/javascript" src ="js/THREE.GamepadControls.js"></script>
+	<script type="text/javascript" src ="js/Controles.js"></script>
 	<script type="text/javascript">
 
 			$(".btn-Retornar").click(function () {
@@ -50,6 +51,57 @@
             });
 
 
+			function MovimientosJugador( camara,  objeto,  foward, yaw, lados,subir,jugador) {
+
+				let vector = new THREE.Vector3();
+				
+				
+			
+				camara.getWorldDirection( vector );
+
+				objeto.position.x += vector.x * foward * deltaTime;
+				objeto.position.z += vector.z * foward * deltaTime;
+
+
+				jugador.position.x += vector.x * foward * deltaTime;
+				jugador.position.z += vector.z * foward * deltaTime;
+
+
+				jugador.getWorldDirection( vector );
+
+
+				objeto.translateX(lados*deltaTime);
+
+				jugador.translateX(-lados*deltaTime);	
+
+
+			
+
+				camara.getWorldDirection( vector );
+
+
+
+			const myAxis = new THREE.Vector3(0,1, 0);
+
+			objeto.rotateOnAxis(myAxis, yaw * deltaTime);
+			jugador.rotateOnAxis(myAxis, yaw * deltaTime);
+
+
+			var myAxis2 = new THREE.Vector3(0,0, 1);
+
+				
+				camara.rotateX(subir * deltaTime);
+				//objeto.rotateOnAxis(myAxis2,-subir * deltaTime);
+				camara.getWorldDirection( vector );
+				if(vector.y < -0.5 || vector.y >0.5){
+				camara.rotateX(-subir * deltaTime);
+				//objeto.rotateOnAxis(myAxis2,subir * deltaTime);
+			}
+
+			
+
+
+}
 	var scene;
 	var camera;
 	var camera2;
@@ -74,25 +126,39 @@
 
 
 		var loader = new THREE.FBXLoader();
-		loader.load("assets/pollitoExport1/pollitoCmueve2.fbx", model =>{
-			var mixer = new THREE.AnimationMixer(model);
+		loadOBJWithMTL("models/nuevosModelos/", "pollito.obj", "pollito.mtl", (object) => {
+			
 
 
-			model.position.z = -15;
-			model.rotation.x = THREE.Math.degToRad(-90);
-			model.position.x=-15;
-			model.position.y=0;
-			model.scale.set(.1,.1,.1);
-			var action = mixer.clipAction(model.animations[0]);
+			object.rotation.y = THREE.Math.degToRad(180);
+			object.scale.set(.1,.1,.1);
+	
 
-			scene.add(model);
-			action.play();
-			action.setLoop(THREE.LoopOnce);
-			action.timeScale = 500;
-			objs.push({model,mixer});
-			model.name = "pollitofbx"
+		
+		var ancla = new THREE.Object3D();
+			ancla.position.x=0;
+			ancla.position.z=0;
+			ancla.position.y=0;
+
+			ancla.name="jugador1";
+			object.name = "pollito";
+			//object.position.z=-10;
+			ancla.add(camera);
+			ancla.camera;
+			camera.position.z=5;
+			camera.position.y=5;
+			//camera.rotation.y= THREE.Math.degToRad(180);
+			scene.add(object);
+			scene.add(ancla);
+
+			var material2 = new THREE.MeshLambertMaterial({
+			color: new THREE.Color(0.0,0.0,0.5)
+		});
+
 				isWorldReady[6] = true;;
-			console.log("cargar pollito fbx terminado 6 ");
+			console.log("cargar pollito normal terminado 6 ");
+
+
 
 
 		});
@@ -107,21 +173,13 @@
 			new THREE.Vector3(0,-1,0)
 		];
 		
-		var material = new THREE.MeshLambertMaterial({
-			color: new THREE.Color(0.5,0.0,0.0)
-		});
-		var geometry = new THREE.BoxGeometry(1,1,1);
-		var ancla = new THREE.Object3D();
-		var cubo  = new THREE.Mesh(geometry,material);
-			ancla.name="jugador1";
-			cubo.scale.set(5,5,5);
-			//cubo.position.z=-10;
-			ancla.add(cubo);
-			scene.add(ancla);
+		
 
 			var material2 = new THREE.MeshLambertMaterial({
 			color: new THREE.Color(0.0,0.0,0.5)
 		});
+
+
 			var geometry2 = new THREE.BoxGeometry(1,1,1);
 			var ancla2 = new THREE.Object3D();
 			var cubo2  = new THREE.Mesh(geometry2,material2);
@@ -317,7 +375,8 @@
 		requestAnimationFrame(render);
 
 		deltaTime = clock.getDelta();	
-		var cubo = scene.getObjectByName("jugador1");
+		var jugador1 = scene.getObjectByName("jugador1");
+		var pollito = scene.getObjectByName("pollito");
 		var cubo2 = scene.getObjectByName("jugador2");
 
 		var yaw = 0;
@@ -331,49 +390,54 @@
 		if(gamepads[0] != null){
 			
 
-  			if(gamepads[0].axes[2] >.9){
+  			if(gamepads[0].axes[0] >.9){
 
   				lados = 20;
   			}
 
 
-  			if(gamepads[0].axes[2] <-.9){
+  			if(gamepads[0].axes[0] <-.9){
 
   				lados = -20;  //derecha derecha +, izquierda -
   			}
 
 
-  			if(gamepads[0].axes[1] >.9){
+  			if(gamepads[0].axes[3] >.9){
 
   				 subir = -3;// izquierda abajo +, arriba -
   				
   			}
 
-  			if(gamepads[0].axes[1] <-.9){
+  			if(gamepads[0].axes[3] <-.9){
 
   				subir = 3; // izquierda abajo +, arriba -
   				
   			}
 
-  			if(gamepads[0].axes[0] >.9){
+  			if(gamepads[0].axes[2] >.9){
 
   			yaw = -5;//izqueirda derecha +, izquierda -
   			}
 
-  			if(gamepads[0].axes[0] <-.9){
+  			if(gamepads[0].axes[2] <-.9){
 
   				yaw = 5;
   			}
 
 
-  			if(gamepads[0].axes[3] >.9){
+  			if(gamepads[0].axes[1] >.9){
 
   				forward = -20;// derecha abajo +, arriba -
   			}
 
-  			if(gamepads[0].axes[3] <-.9){
+  			if(gamepads[0].axes[1] <-.9){
 
   				forward = 20;// derecha abajo +, arriba -
+  			}
+
+  			if(gamepads[0].buttons[7].pressed){//gatillo derecho
+
+  				alert("disparo");
   			}
   		if (gamepads[0].buttons[9].pressed) {
   			
@@ -446,82 +510,10 @@
 		&& isWorldReady[9] && !pausa) {
 
 		
-				let vector = new THREE.Vector3();
-				
-				objs.forEach(({mixer}) => {mixer.update(deltaTime);});
-			
-				camera.getWorldDirection( vector );
-
-				camera.position.x += vector.x * forward * deltaTime;
-				camera.position.z += vector.z * forward * deltaTime;
+			/*MovimientosJugador( camara,  objeto,  foward, yaw, lados,subir)*/
 
 
-				cubo.position.x += vector.x * forward * deltaTime;
-				cubo.position.z += vector.z * forward * deltaTime;
-
-
-				camera.getWorldDirection( vector );
-
-
-				camera.translateX(lados*deltaTime);
-				cubo.translateX(lados*deltaTime);
-				//camera.position.z += vector.z * lados * deltaTime;
-
-				
-				//cubo.position.y += vector.y * lados * deltaTime;
-				//cubo.position.x += vector.x * lados * deltaTime;
-
-
-
-
-			
-
-				camera.getWorldDirection( vector );
-
-
-
-			const myAxis = new THREE.Vector3(0,1, 0);
-// rotate the mesh 45 on this axis
-			camera.rotateOnWorldAxis(myAxis, yaw * deltaTime);
-			cubo.rotateOnWorldAxis(myAxis, yaw * deltaTime);
-/*var cosox = camera.rotation.x;
-				var cosoz = camera.rotation.z;
-				camera.rotation.x=-vector.x;
-				camera.rotation.z=-vector.z;
-
-
-				if(subir ==0)
-			if (vector.z <0){
-			camera.rotation.y += yaw * deltaTime;
-			cubo.rotation.y += yaw * deltaTime;
-
-
-		}
-		else{
-			camera.rotation.y += -yaw * deltaTime;
-			cubo.rotation.y += -yaw * deltaTime;
-
-		}
-
-		camera.rotation.x=cosox;
-		camera.rotation.z=cosoz;*/
-
-		//camera.rotateY(yaw * deltaTime);
-
-
-				
-				camera.rotateX(subir * deltaTime);
-				cubo.rotateX(subir * deltaTime);
-				camera.getWorldDirection( vector );
-				if(vector.y < -0.9 || vector.y >0.9){
-				camera.rotateX(-subir * deltaTime);
-				cubo.rotateX(-subir * deltaTime);
-			}
-
-			
-
-
-			
+			MovimientosJugador( camera,  pollito,  forward, yaw, lados,subir,jugador1);
 			
 		
 
@@ -565,7 +557,7 @@
 		camera = new THREE.PerspectiveCamera(75, visibleSize.width / visibleSize.height, 0.1, 10000);
 		camera2 = new THREE.PerspectiveCamera(75, visibleSize.width / visibleSize.height, 0.1, 10000);
 		//camera.position.z = 2;
-	//	camera.position.y = 5;
+		
 		camera2.position.z = 2;
 		camera2.position.y = 5;
 		//controls = new THREE.GamepadControls( camera );
