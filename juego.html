@@ -54,13 +54,14 @@
             	cantidad=0;
             	speed=3;
             	reloj;
-            	//PosicionProyectil = new Array();
+            	PosicionProyectil = new Array();
             	VectorProyectil = new Array();
             	nombresProyectil = new Array();
-            	constructor(modelo,nombre) {
+            	constructor(modelo,nombre,id) {
             		this.modelo=modelo;
             		this.nombre=nombre;
 					this.reloj  = new THREE.Clock();
+					this.id = id;
             			}
 
 
@@ -69,7 +70,7 @@
             		if(this.reloj.getElapsedTime() >  1 || this.cantidad==0){
             		var modeloclonado = this.modelo.clone();
             		modeloclonado.name = this.nombre+"proyectil"+this.cantidad;
-
+            		this.PosicionProyectil.push(posicion);
             		this.nombresProyectil.push(modeloclonado.name );
             		this.cantidad++;
             		modeloclonado.position.x=posicion.x;
@@ -82,7 +83,7 @@
             	}		
 
 
-            	ActualizarProyectiles(actual){
+            	ActualizarProyectiles(){
 
             		for(var i=0;i<this.nombresProyectil.length;i++){
 					
@@ -93,11 +94,12 @@
 					objeto.rotation.x += this.speed;
 					objeto.rotation.z += this.speed;
 
-					if(objeto.position.distanceTo(actual)>100){
+					if(objeto.position.distanceTo(this.PosicionProyectil[i])>100){
 
 						scene.remove(objeto);
 						this.VectorProyectil.splice(i, 1);
 						this.nombresProyectil.splice(i, 1);
+						this.PosicionProyectil.splice(i, 1);
 						i--;
 						
 
@@ -170,6 +172,7 @@
 	var objects = [];
 
 	var proyectiles;
+	var proyectiles2;
 
 	var clock;
 	var deltaTime;	
@@ -239,32 +242,8 @@
 		});
 
 
-			var material2 = new THREE.MeshLambertMaterial({
-			color: new THREE.Color(0.0,0.0,0.5)
-			});
-			var geometry2 = new THREE.BoxGeometry(1,1,1);
-			var ancla2 = new THREE.Object3D();
-			var cubo2  = new THREE.Mesh(geometry2,material2);
-			proyectiles = new classproyectiles(cubo2,"jugador1");
-			
-			ancla2.name="jugador2";
-			cubo2.scale.set(5,5,5);
-			cubo2.position.z=-10;
-
-			ancla2.add(cubo2);
-			scene.add(ancla2);
-			
-		loadOBJWithMTL("assets/", "box.obj", "box.mtl", (object) => {
-			object.position.z = -30;			
-
-	
-			
-			
 		
-			isWorldReady[0] = true;
-		});
 
-	
 
 		loadOBJWithMTL("models/nuevosModelos/", "dianaGrande.obj", "dianaGrande.mtl", (object) => {
 			object.position.z = -10;
@@ -293,7 +272,7 @@
 			object.position.x=-30;
 			object.position.y=5;
 			object.scale.set(.1,.1,.1);
-
+			proyectiles = new classproyectiles(object,"Jugador1",1);
 			scene.add(object);
 			console.log("diana solita cuerdita cargado 3");
 			isWorldReady[3] = true;
@@ -323,13 +302,26 @@
 			console.log("diana solita gancho x2 cargado 5");
 		});
 		loadOBJWithMTL("models/nuevosModelos/", "lobo.obj", "lobo.mtl", (object) => {
-			object.position.z = -15;
-			//object.rotation.x = THREE.Math.degToRad(-90);
-			object.position.x=15;
-			object.position.y=0;
-			object.scale.set(.1,.1,.1);
+					
 
+			object.scale.set(.05,.05,.05);
+			object.rotateY(THREE.Math.degToRad(180));
+		var ancla = new THREE.Object3D();
+			ancla.position.x=0;
+			ancla.position.z=0;
+			ancla.position.y=0;
+
+			ancla.name="jugador2";
+			object.name = "lobo";
+			//object.position.z=-10;
+			ancla.add(camera2);
+			ancla.camera2;
+			camera2.position.z=5;
+			camera2.position.y=5;
+			//camera.rotation.y= THREE.Math.degToRad(180);
 			scene.add(object);
+			scene.add(ancla);
+
 			console.log("lobo cargado 7");
 			isWorldReady[7] = true;
 		});
@@ -340,7 +332,7 @@
 			object.position.x=0;
 			object.position.y=0;
 			object.scale.set(.01,.01,.01);
-
+			proyectiles2 = new classproyectiles(object,"Jugador2",2);
 			scene.add(object);
 			console.log("pollo cargado 8");
 			isWorldReady[8] = true;
@@ -362,6 +354,7 @@
 			object.position.x=0;
 			object.position.y=-1;
 			object.scale.set(.1,.1,.1);
+
 			scene.add(object);
 			console.log("el escenario completo cargado 9");
 			objects.push(object);
@@ -432,7 +425,8 @@
 		deltaTime = clock.getDelta();	
 		var jugador1 = scene.getObjectByName("jugador1");
 		var pollito = scene.getObjectByName("pollito");
-		var cubo2 = scene.getObjectByName("jugador2");
+		var jugador2 = scene.getObjectByName("jugador2");
+		var lobo = scene.getObjectByName("lobo");
 
 		var yaw = 0;
 		var forward = 0;
@@ -441,60 +435,62 @@
 		
 		var yaw2 = 0;
 		var forward2 = 0;
+		var lados2 = 0;
+		var subir2 = 0;
 		
 		if(gamepads[0] != null){
 			
 
   			if(gamepads[0].axes[0] >.9){
 
-  				lados = -20;
+  				lados2 = -20;
   			}
 
 
   			if(gamepads[0].axes[0] <-.9){
 
-  				lados = 20;  //derecha derecha +, izquierda -
+  				lados2 = 20;  //derecha derecha +, izquierda -
   			}
 
 
   			if(gamepads[0].axes[3] >.9){
 
-  				 subir = -3;// izquierda abajo +, arriba -
+  				 subir2 = -3;// izquierda abajo +, arriba -
   				
   			}
 
   			if(gamepads[0].axes[3] <-.9){
 
-  				subir = 3; // izquierda abajo +, arriba -
+  				subir2 = 3; // izquierda abajo +, arriba -
   				
   			}
 
   			if(gamepads[0].axes[2] >.9){
 
-  			yaw = -5;//izqueirda derecha +, izquierda -
+  			yaw2 = -5;//izqueirda derecha +, izquierda -
   			}
 
   			if(gamepads[0].axes[2] <-.9){
 
-  				yaw = 5;
+  				yaw2 = 5;
   			}
 
 
   			if(gamepads[0].axes[1] >.9){
 
-  				forward = -20;// derecha abajo +, arriba -
+  				forward2 = -20;// derecha abajo +, arriba -
   			}
 
   			if(gamepads[0].axes[1] <-.9){
 
-  				forward = 20;// derecha abajo +, arriba -
+  				forward2 = 20;// derecha abajo +, arriba -
   			}
 
   			if(gamepads[0].buttons[7].pressed){//gatillo derecho
   				let vector = new THREE.Vector3();
   				let vector2 = new THREE.Vector3();
-  				camera.getWorldDirection( vector );
-  				camera.getWorldPosition ( vector2 );
+  				camera2.getWorldDirection( vector );
+  				camera2.getWorldPosition ( vector2 );
   			
   				proyectiles.agregarProyectil(vector2,vector);
   			}
@@ -533,38 +529,42 @@
 
 		if (keys["A"]) {
 
-		let vector = new THREE.Vector3();
-			camera.getWorldDirection( vector );
-
-			alert("X  = " + vector.x +  "   Y  = " + vector.y +"  Z  = " + vector.z);
-
-			keys["A"]=false;
+			lados = 20;
 		} else if (keys["D"]) {
-	alert("RX  = " + camera.rotation.x +  "   RY  = " + camera.rotation.y +"  RZ  = " + camera.rotation.z);
-	keys["D"]=false;
+			lados = -20;
+
 		}
 		if (keys["W"]) {
-		alert("pX  = " + camera.position.x +  "  pY  = " + camera.position.y +"  pZ  = " + camera.position.z);
-		keys["W"]=false;
+			forward = 20;
+
 		} else if (keys["S"]) {
-		//	forward = 20;
+			forward = -20;
 		}
 
 	
 		if (keys["J"]) {
-			yaw2 = 5;
+			yaw = 5;
 		} else if (keys["L"]) {
-			yaw2 = -5;
+			yaw = -5;
 		}
 		if (keys["I"]) {
-			forward2 = -20;
+			subir = 3;
 		} else if (keys["K"]) {
-			forward2 = 20;
+			subir = -3;
+		}
+
+		 else if (keys["O"]) {
+			let vector = new THREE.Vector3();
+  				let vector2 = new THREE.Vector3();
+  				camera.getWorldDirection( vector );
+  				camera.getWorldPosition ( vector2 );
+  			
+  				proyectiles2.agregarProyectil(vector2,vector);
 		}
 
 
 
-		if (isWorldReady[0] && isWorldReady[1] && isWorldReady[2]
+		if (isWorldReady[1] && isWorldReady[2]
 		&& isWorldReady[3] && isWorldReady[4] && isWorldReady[5]
 		&& isWorldReady[6] && isWorldReady[7] && isWorldReady[8]
 		&& isWorldReady[9] && !pausa) {
@@ -574,20 +574,22 @@
 
 			let vector = new THREE.Vector3();
 
+			MovimientosJugador( camera2,  lobo,  forward2, yaw2, lados2,subir2,jugador2);
 			MovimientosJugador( camera,  pollito,  forward, yaw, lados,subir,jugador1);
 			
 
 
-  				camera.getWorldDirection( vector );
- 
-			proyectiles.ActualizarProyectiles(vector);
+  			camera.getWorldDirection( vector );
+ 			
+			proyectiles.ActualizarProyectiles();
+			proyectiles2.ActualizarProyectiles();
 
 
-			camera2.rotation.y += yaw2 * deltaTime;
+			/*camera2.rotation.y += yaw2 * deltaTime;
 			camera2.translateZ(forward2 * deltaTime);
 
 			cubo2.rotation.y += yaw2 * deltaTime;
-			cubo2.translateZ(forward2 * deltaTime);
+			cubo2.translateZ(forward2 * deltaTime);*/
 
 			for(var i = 0;i<camera.misRayos.length;i++){
 
@@ -623,8 +625,8 @@
 		camera2 = new THREE.PerspectiveCamera(75, visibleSize.width / visibleSize.height, 0.1, 10000);
 		//camera.position.z = 2;
 		
-		camera2.position.z = 2;
-		camera2.position.y = 5;
+		//camera2.position.z = 2;
+		//camera2.position.y = 5;
 		//controls = new THREE.GamepadControls( camera );
 		renderer = new THREE.WebGLRenderer( {precision: "mediump" } );
 		renderer.setClearColor(new THREE.Color(0, 0, 0));
