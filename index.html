@@ -20,35 +20,63 @@
                 top -=33
                 left += 251
               
-            $('#pollitos').css({
+                $('#pollitos').css({
                     
                   "visibility": "visible", //O lo que desees
                   "top" : top+"px",
                   "left" : left +"px"
                 });
-                    });
-       
+            });
             $('#btnJugar').mouseleave(function(){
             
-            $('#pollitos').css({
+                $('#pollitos').css({
                  
                   "visibility": "hidden" //O lo que desees
                 });
                     });
-
                 $('#btnJugar').click(function(){
                     window.location.href = "elegirEscenario.html";
                     //window.location.href = "juego.html";
                 });
-
                 $('#btnConfig').click(function(){
                     window.location.href = "Configuracion.html";
                 });
 
                 $('#btnPuntuaciones').click(function(){
+                    window.location.href = "Puntuaciones.html";
+               });
 
-               window.location.href = "Puntuaciones.html";
+            $('#btnConfig').mouseenter(function(){
+                var top = $('#btnConfig').position().top;
+                var left = $('#btnConfig').position().left;
+                
+                top -=33
+                left += 251
+              
+                $('#lobo').css({
+                    
+                  "visibility": "visible", //O lo que desees
+                  "top" : top+"px",
+                  "left" : left +"px"
+                });
+            });
+            $('#btnConfig').mouseleave(function(){
+            
+                $('#lobo').css({
+                 
+                  "visibility": "hidden" //O lo que desees
+                });
+                    });
+                $('#btnJugar').click(function(){
+                    window.location.href = "elegirEscenario.html";
+                    //window.location.href = "juego.html";
+                });
+                $('#btnConfig').click(function(){
+                    window.location.href = "Configuracion.html";
+                });
 
+                $('#btnPuntuaciones').click(function(){
+                    window.location.href = "Puntuaciones.html";
                });
         });
       
@@ -70,6 +98,7 @@
                         <button id="btnJugar">Jugar</button>
                     </div>
                     <div>
+                        <img id="lobo" src="CSS/botonOpciones.png" alt="botonJugar" height="150" width="150" >
                         <button id="btnConfig">Configuraciones</button>
                     </div>
                     <div>

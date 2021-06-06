@@ -1,7 +1,7 @@
 <html>
 <head>
 	
-	<title>2.3 Colisiones</title>
+	<title>Wolf Attack</title>
 	<style type="text/css">
 		.flex-container{
 		 display: flex;
@@ -13,8 +13,8 @@
 		}
 
 		.mPausa {
-            width: 30vw;
-            height: 40vh;
+            width: 50vw;
+            height: 55vh;
             background-image: url(CSS/menus.png);
             background-size: cover;
             background-repeat: no-repeat;
@@ -24,9 +24,45 @@
             top: 10vh;
             left: 25vw;
             visibility: hidden;
+			border-radius:10px ;
+			border-width: 3px;
+			border-color: rgb(238, 151, 20);
         }
-	
-	
+		.imgWin{
+			width: 50vw;
+            height: 55vh;
+            background-image: url(CSS/menusWin.png);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+			z-index: 100;
+			position:fixed;
+			top: 10vh;
+            left: 0%;
+			color: rgb(67, 67, 158);
+			font-weight: bolder;
+    		font-family: 'Akaya Kanadaka', cursive;
+            visibility: hidden;
+		}
+		.imgLose{
+			width: 50vw;
+            height: 55vh;
+            background-image: url(CSS/menusLose.png);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+			z-index: 100;
+			position:fixed;
+			top: 10vh;
+            right: 0%;
+			color: rgb(163, 19, 26);
+            font-weight: bolder;
+    		font-family: 'Akaya Kanadaka', cursive;
+			visibility: hidden;
+		}
+		
+		
+
 	</style>
 	<script type="text/javascript" src="js/jquery-3.5.1.min.js"></script> 
 	<script type="text/javascript" src="js/libs/three/three2.js"></script> 
@@ -36,20 +72,10 @@
 	<script type="text/javascript" src="js/libs/three/inflate.min.js"></script>  
 	<script type="text/javascript" src ="js/THREE.GamepadControls.js"></script>
 	<script type="text/javascript" src ="js/Controles.js"></script>
+	<link rel="stylesheet" href="CSS/pausa.css">
 	<script type="text/javascript">
 
-			$(".btn-Retornar").click(function () {
-                $(".mPausa").css("visibility", "hidden");
-                pauseGame = false;
-            });
-
-
-            $(".btn-Menu").click(function () {
-                setTimeout(function () {
-                    window.location.href = 'index.html';
-                }, 1000);
-            });
-
+			
 
 			function MovimientosJugador( camara,  objeto,  foward, yaw, lados,subir,jugador) {
 
@@ -120,8 +146,31 @@
 	var mixers_2 = [];
 	var persona;
 	
+	
 	$(document).ready(function() {
-			setupScene();
+
+		function getQueryVariable(variable) {
+        	var query = window.location.search.substring(1);
+        	var vars = query.split("&");
+        	for (var i = 0; i < vars.length; i++) {
+        	    var pair = vars[i].split("=");
+        	    if (pair[0] == variable) {
+        	        return pair[1];
+        	    }
+        	}
+        	return false;
+    	}
+		$(".btn-Retornar").click(function () {
+                $(".mPausa").css("visibility", "hidden");
+                pauseGame = false;
+        });
+
+        $(".btn-Menu").click(function () { 
+            setTimeout(function () {
+                window.location.href = "index.html";
+            }, 1000);
+        });
+		setupScene();
 		rayCaster = new THREE.Raycaster();
 
 
@@ -130,8 +179,8 @@
 			
 
 
-			object.rotation.y = THREE.Math.degToRad(180);
-			object.scale.set(.1,.1,.1);
+		object.rotation.y = THREE.Math.degToRad(180);
+		object.scale.set(.1,.1,.1);
 	
 
 		
@@ -155,7 +204,7 @@
 			color: new THREE.Color(0.0,0.0,0.5)
 		});
 
-				isWorldReady[6] = true;;
+			isWorldReady[6] = true;;
 			console.log("cargar pollito normal terminado 6 ");
 
 
@@ -164,39 +213,7 @@
 		});
 
 	
-		/*loader.load("assets/pollitoExport1/pollitoCmueve.fbx", function (personaje){
-
-			personaje.mixer = new THREE.AnimationMixer(personaje);
-			mixers.push(personaje.mixer);
-
-			var action = personaje.mixer.clipAction(personaje.animations[0]);
-
-			action.play();
-
-			personaje.position.z = -15;
-			//object.rotation.x = THREE.Math.degToRad(-90);
-			personaje.position.x=-15;
-			personaje.position.y=0;
-			//object.scale.set(.1,.1,.1);
-			persona.position.set(personaje.position.x,2,personaje.position.z);
-
-			personaje.traverse(function (child){
-				if (child.isMesh){
-					child.castShadow = true;
-					child.receiveShadow = true;
-				}
-
-			});
-
-			scene.add(personaje);
-			persona.add(personaje);
-			//persona.add(camera);
-			scene.add(persona);
-
-				console.log("pollito fbx cargado");
-			isWorldReady[6] = true;
-		});*/
-
+	
 		camera.misRayos = [
 			new THREE.Vector3(0,0,1),
 			new THREE.Vector3(0,0,-1),
@@ -224,17 +241,7 @@
 		loadOBJWithMTL("assets/", "box.obj", "box.mtl", (object) => {
 			object.position.z = -30;			
 
-		//	var box2 = object.clone();
-			
-
-			//scene.add(object);
-			
-			//scene.add(box3);
-		//	scene.add(box4);
-		//	scene.add(box5);
-		//	scene.add(box6);
-		//	scene.add(box7);
-		//	scene.add(box8);
+	
 			
 			
 			console.log("boxx cargado 0");
@@ -311,7 +318,7 @@
 			isWorldReady[7] = true;
 		});
 
-		loadOBJWithMTL("models/nuevosModelos/", "pollo.obj", "pollo.mtl", (object) => {
+		loadOBJWithMTL("models/nuevosModelos/", "pollito.obj", "pollito.mtl", (object) => {
 			object.position.z = -15;
 			//object.rotation.x = THREE.Math.degToRad(-90);
 			object.position.x=0;
@@ -333,18 +340,103 @@
 			isWorldReady[6] = true;
 		});*/
 
-		loadOBJWithMTL("models/nuevosModelos/", "escenarioFull.obj", "escenarioFull.mtl", (object) => {
+			var idEsc=getQueryVariable("id");
+	if(idEsc==1){
+		loadOBJWithMTL("models/terrenoPlano/", "terreno1.obj", "terreno1.mtl", (object) => {
 			object.position.z = -0;
 			//object.rotation.x = THREE.Math.degToRad(-90);
 			object.position.x=0;
-			object.position.y=-1;
-			object.scale.set(.1,.1,.1);
+			object.position.y=-10;
+			object.scale.set(.2,.2,.2);
 			scene.add(object);
 			console.log("el escenario completo cargado 9");
 			objects.push(object);
 			isWorldReady[9] = true;
 		});
-
+		loadOBJWithMTL("models/terrenoPlano/", "awaTerreno1.obj", "awaTerreno1.mtl", (object) => {
+			object.position.z = -0;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=0;
+			object.position.y=-10;
+			object.scale.set(.2,.2,.2);
+			scene.add(object);
+			console.log("el escenario completo cargado 9");
+			objects.push(object);
+			isWorldReady[9] = true;
+		});
+		loadOBJWithMTL("models/elementosTerrenoPlano/", "elementosTerreno1.obj", "elementosTerreno1.mtl", (object) => {
+			object.position.z = -0;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=0;
+			object.position.y=-13;
+			object.scale.set(.2,.2,.2);
+			scene.add(object);
+			console.log("el escenario completo cargado 9");
+			objects.push(object);
+			isWorldReady[9] = true;
+		});
+	}else{
+		if(idEsc==2){
+			loadOBJWithMTL("models/terrenoPlano/", "terreno2.obj", "terreno2.mtl", (object) => {
+				object.position.z = -0;
+				//object.rotation.x = THREE.Math.degToRad(-90);
+				object.position.x=0;
+				object.position.y=-1;
+				object.scale.set(.2,.2,.2);
+				scene.add(object);
+				console.log("el escenario completo cargado 9");
+				objects.push(object);
+				isWorldReady[9] = true;
+			});
+			loadOBJWithMTL("models/elementosTerrenoPlano/", "elementosTerreno2.obj", "elementosTerreno2.mtl", (object) => {
+				object.position.z = -0;
+				//object.rotation.x = THREE.Math.degToRad(-90);
+				object.position.x=0;
+				object.position.y=-1;
+				object.scale.set(.2,.2,.2);
+				scene.add(object);
+				console.log("el escenario completo cargado 9");
+				objects.push(object);
+				isWorldReady[9] = true;
+			});
+		}else{
+			if(idEsc==3){
+				loadOBJWithMTL("models/terrenoPlano/", "terreno3.obj", "terreno3.mtl", (object) => {
+					object.position.z = -200;
+					//object.rotation.x = THREE.Math.degToRad(-90);
+					object.position.x=0;
+					object.position.y=-1;
+					object.scale.set(5,5,5);
+					scene.add(object);
+					console.log("el escenario completo cargado 9");
+					objects.push(object);
+					isWorldReady[9] = true;
+				});
+				loadOBJWithMTL("models/terrenoPlano/", "awaTerreno3.obj", "awaTerreno3.mtl", (object) => {
+					object.position.z = -200;
+					//object.rotation.x = THREE.Math.degToRad(-90);
+					object.position.x=0;
+					object.position.y=-1;
+					object.scale.set(5,5,5);
+					scene.add(object);
+					console.log("el escenario completo cargado 9");
+					objects.push(object);
+					isWorldReady[9] = true;
+				});
+				loadOBJWithMTL("models/elementosTerrenoPlano/", "elementosTerreno3.obj", "elementosTerreno3.mtl", (object) => {
+					object.position.z = -200;
+					//object.rotation.x = THREE.Math.degToRad(-90);
+					object.position.x=0;
+					object.position.y=-1;
+					object.scale.set(5,5,5);
+					scene.add(object);
+					console.log("el escenario completo cargado 9");
+					objects.push(object);
+					isWorldReady[9] = true;
+				});
+			}
+		}
+	}
 		render();
 
 		document.addEventListener('keydown', onKeyDown);
@@ -410,23 +502,27 @@
 		var jugador1 = scene.getObjectByName("jugador1");
 		var pollito = scene.getObjectByName("pollito");
 		var cubo2 = scene.getObjectByName("jugador2");
+
 		var yaw = 0;
 		var forward = 0;
+		var subir=0;
+		var lados = 0;
+		
 		var yaw2 = 0;
 		var forward2 = 0;
+		
 		if(gamepads[0] != null){
 			
 
   			if(gamepads[0].axes[0] >.9){
 
-  				//derecha derecha +, izquierda -
+  				lados = -20;
   			}
 
-  			if(gamepads[0].axes[1] >.001){
 
   			if(gamepads[0].axes[0] <-.9){
 
-  				lados = -20;  //derecha derecha +, izquierda -
+  				lados = 20;  //derecha derecha +, izquierda -
   			}
 
 
@@ -455,12 +551,12 @@
 
   			if(gamepads[0].axes[1] >.9){
 
-  				forward = 20;// derecha abajo +, arriba -
+  				forward = -20;// derecha abajo +, arriba -
   			}
 
   			if(gamepads[0].axes[1] <-.9){
 
-  				forward = -20;// derecha abajo +, arriba -
+  				forward = 20;// derecha abajo +, arriba -
   			}
 
   			if(gamepads[0].buttons[7].pressed){//gatillo derecho
@@ -494,18 +590,29 @@
 				pausa =true;
 				$(".mPausa").css("visibility", "visible");
 			}
-			gamepads[0].buttons[9].pressed = false;
+			
 			keys["P"] = false;
 
 		}
 
 		if (keys["A"]) {
-		//	yaw = 5;
+
+		let vector = new THREE.Vector3();
+			camera.getWorldDirection( vector );
+
+			alert("X  = " + vector.x +  "   Y  = " + vector.y +"  Z  = " + vector.z);
+
+			keys["A"]=false;
 		} else if (keys["D"]) {
-		//	yaw = -5;
+			alert("RX  = " + camera.rotation.x +  "   RY  = " + camera.rotation.y +"  RZ  = " + camera.rotation.z);
+			keys["D"]=false;
 		}
 		if (keys["W"]) {
-		//	forward = -20;
+			let vector = new THREE.Vector3();
+
+            camera.getWorldPosition ( vector );
+		alert("pX  = " + vector.x +  "  pY  = " + vector.y +"  pZ  = " + vector.z);
+		keys["W"]=false;
 		} else if (keys["S"]) {
 		//	forward = 20;
 		}
@@ -537,8 +644,6 @@
 			
 		
 
-			cubo.rotation.y += yaw * deltaTime;
-			cubo.translateZ(forward * deltaTime);
 
 			camera2.rotation.y += yaw2 * deltaTime;
 			camera2.translateZ(forward2 * deltaTime);
@@ -618,26 +723,58 @@
 		$("#scene-section").append(renderer.domElement);
 		$("#scene-section2").append(renderer2.domElement);
 	}
-}
+
 
 	</script>
 </head>
 
 <body>
+	
 	<div class =".flex-container" style="display: flex; height: 100px;">
-	<div style ="width: 49%; 	border: 2px solid yellow;" id="scene-section"/></div>
+
+	<div style ="width: 49%; 	border: 2px solid yellow;" id="scene-section"/>
+		
+	</div>
 	<div  style ="width: 49%; 	border: 2px solid yellow;" id="scene-section2"/></div>
+	<div>
+		<h2 id="puntuacionJ1">puntuacion 1</h2>
+		<h2 id="puntuacionJ2">puntuacion 2</h2>
+		<h2 id="textoTiempo">Time</h2>
+
+	</div>
 	<div class="mPausa">
-        <br>
-        <img src="CSS/nombreJuego.png" alt="nombresito" style="height: 135px; width: 135px;">
-        <h1 id="puntajeP1"></h1>
-        <br>
-        <br>
-        <button class="btn btn-Retornar">Continuar jugando</button>
-        <br>
-        <br>
-        <button class="btn btn-Menu">Regresar al menu principal</button>
+		<center>
+			<img src="CSS/nombreJuego.png" alt="nombresito" style="height: 225px; width: 225px;">
+		</center>
+		<center>
+			<h3 id="puntajeP1"></h3>
+		</center>
+		<center>
+			<div id="botones">
+				<button id="btnReanudar" class="btn btn-Retornar">Continuar jugando</button>
+				<button id="BtnSalirMenu" class="btn btn-Menu">Volver al Menu</button>
+			</div>
+		</center>
     </div>
+	<div class="imgWin">
+		<center>
+			<h3 id="win">Jugador tal, has ganado</h3>
+			<h4 id="puntJ1">Puntuacion final</h4>
+		</center>
+		
+		<center>
+			<img src="CSS/botonOpciones.png" alt="nombresito" style="height: 150px; width: 150px;">
+		</center>
+	</div>
+	<div class="imgLose">
+		<center>
+			<h3 id="lose">Jugador tal, has perdido</h3>
+			<h4 id="puntJ2">Puntuacion final</h4>
+		</center>
+		<center>
+			<img src="CSS/botonJugar.png" alt="nombresito" style="height: 150px; width: 150px;">
+		</center>
+	</div>
 </div>
 </body>
 </html>
