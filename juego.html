@@ -50,7 +50,64 @@
                 }, 1000);
             });
 
+            class classproyectiles {
+            	cantidad=0;
+            	speed=3;
+            	reloj;
+            	//PosicionProyectil = new Array();
+            	VectorProyectil = new Array();
+            	nombresProyectil = new Array();
+            	constructor(modelo,nombre) {
+            		this.modelo=modelo;
+            		this.nombre=nombre;
+					this.reloj  = new THREE.Clock();
+            			}
 
+
+            	agregarProyectil(posicion,vector){
+            		
+            		if(this.reloj.getElapsedTime() >  1 || this.cantidad==0){
+            		var modeloclonado = this.modelo.clone();
+            		modeloclonado.name = this.nombre+"proyectil"+this.cantidad;
+
+            		this.nombresProyectil.push(modeloclonado.name );
+            		this.cantidad++;
+            		modeloclonado.position.x=posicion.x;
+            		modeloclonado.position.y=posicion.y;
+            		modeloclonado.position.z=posicion.z;
+            		this.reloj.start();
+            		this.VectorProyectil.push(vector);
+            		scene.add(modeloclonado);
+            	}
+            	}		
+
+
+            	ActualizarProyectiles(actual){
+
+            		for(var i=0;i<this.nombresProyectil.length;i++){
+					
+					var objeto = scene.getObjectByName(this.nombresProyectil[i]);
+					objeto.position.x += this.VectorProyectil[i].x * this.speed;
+					objeto.position.y += this.VectorProyectil[i].y * this.speed;
+					objeto.position.z += this.VectorProyectil[i].z * this.speed;
+					objeto.rotation.x += this.speed;
+					objeto.rotation.z += this.speed;
+
+					if(objeto.position.distanceTo(actual)>100){
+
+						scene.remove(objeto);
+						this.VectorProyectil.splice(i, 1);
+						this.nombresProyectil.splice(i, 1);
+						i--;
+						
+
+            		}
+            	}	
+            	}
+            	}	
+
+
+            
 			function MovimientosJugador( camara,  objeto,  foward, yaw, lados,subir,jugador) {
 
 				let vector = new THREE.Vector3();
@@ -102,14 +159,18 @@
 
 
 }
+
 	var scene;
 	var camera;
 	var camera2;
 	var renderer;
 	var renderer2;
 	var controls;
-	var objs= [];
+	//var objs= [];
 	var objects = [];
+
+	var proyectiles;
+
 	var clock;
 	var deltaTime;	
 	var keys = {};
@@ -151,9 +212,7 @@
 			scene.add(object);
 			scene.add(ancla);
 
-			var material2 = new THREE.MeshLambertMaterial({
-			color: new THREE.Color(0.0,0.0,0.5)
-		});
+		
 
 				isWorldReady[6] = true;;
 			console.log("cargar pollito normal terminado 6 ");
@@ -180,32 +239,28 @@
 		});
 
 
+			var material2 = new THREE.MeshLambertMaterial({
+			color: new THREE.Color(0.0,0.0,0.5)
+			});
 			var geometry2 = new THREE.BoxGeometry(1,1,1);
 			var ancla2 = new THREE.Object3D();
 			var cubo2  = new THREE.Mesh(geometry2,material2);
+			proyectiles = new classproyectiles(cubo2,"jugador1");
+			
 			ancla2.name="jugador2";
 			cubo2.scale.set(5,5,5);
 			cubo2.position.z=-10;
+
 			ancla2.add(cubo2);
 			scene.add(ancla2);
 			
 		loadOBJWithMTL("assets/", "box.obj", "box.mtl", (object) => {
 			object.position.z = -30;			
 
-		//	var box2 = object.clone();
-			
-
-			//scene.add(object);
-			
-			//scene.add(box3);
-		//	scene.add(box4);
-		//	scene.add(box5);
-		//	scene.add(box6);
-		//	scene.add(box7);
-		//	scene.add(box8);
+	
 			
 			
-			console.log("boxx cargado 0");
+		
 			isWorldReady[0] = true;
 		});
 
@@ -392,13 +447,13 @@
 
   			if(gamepads[0].axes[0] >.9){
 
-  				lados = 20;
+  				lados = -20;
   			}
 
 
   			if(gamepads[0].axes[0] <-.9){
 
-  				lados = -20;  //derecha derecha +, izquierda -
+  				lados = 20;  //derecha derecha +, izquierda -
   			}
 
 
@@ -436,8 +491,12 @@
   			}
 
   			if(gamepads[0].buttons[7].pressed){//gatillo derecho
-
-  				alert("disparo");
+  				let vector = new THREE.Vector3();
+  				let vector2 = new THREE.Vector3();
+  				camera.getWorldDirection( vector );
+  				camera.getWorldPosition ( vector2 );
+  			
+  				proyectiles.agregarProyectil(vector2,vector);
   			}
   		if (gamepads[0].buttons[9].pressed) {
   			
@@ -453,9 +512,10 @@
 			}
 		
 			keys["P"] = false;
+			gamepads[0].buttons[9].pressed=false;
   		}};
 
-		if (keys["P"]) {
+		if (keys["P"] ) {
 			if(pausa  )
 			{
 				pausa=false;
@@ -512,10 +572,15 @@
 		
 			/*MovimientosJugador( camara,  objeto,  foward, yaw, lados,subir)*/
 
+			let vector = new THREE.Vector3();
 
 			MovimientosJugador( camera,  pollito,  forward, yaw, lados,subir,jugador1);
 			
-		
+
+
+  				camera.getWorldDirection( vector );
+ 
+			proyectiles.ActualizarProyectiles(vector);
 
 
 			camera2.rotation.y += yaw2 * deltaTime;
@@ -534,7 +599,7 @@
 
 			}
 			
-			console.log(colisiones.length);
+			
 			if(colisiones.length > 0){
 			
 				if (colisiones[0].distance < 1) {
