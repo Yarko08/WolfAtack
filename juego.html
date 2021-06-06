@@ -50,7 +50,6 @@
                 }, 1000);
             });
 
-
 			function MovimientosJugador( camara,  objeto,  foward, yaw, lados,subir,jugador) {
 
 				let vector = new THREE.Vector3();
@@ -121,6 +120,18 @@
 	var persona;
 	
 	$(document).ready(function() {
+
+		function getQueryVariable(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == variable) {
+                return pair[1];
+            }
+        }
+        return false;
+    	}
 			setupScene();
 		rayCaster = new THREE.Raycaster();
 
@@ -164,39 +175,7 @@
 		});
 
 	
-		/*loader.load("assets/pollitoExport1/pollitoCmueve.fbx", function (personaje){
-
-			personaje.mixer = new THREE.AnimationMixer(personaje);
-			mixers.push(personaje.mixer);
-
-			var action = personaje.mixer.clipAction(personaje.animations[0]);
-
-			action.play();
-
-			personaje.position.z = -15;
-			//object.rotation.x = THREE.Math.degToRad(-90);
-			personaje.position.x=-15;
-			personaje.position.y=0;
-			//object.scale.set(.1,.1,.1);
-			persona.position.set(personaje.position.x,2,personaje.position.z);
-
-			personaje.traverse(function (child){
-				if (child.isMesh){
-					child.castShadow = true;
-					child.receiveShadow = true;
-				}
-
-			});
-
-			scene.add(personaje);
-			persona.add(personaje);
-			//persona.add(camera);
-			scene.add(persona);
-
-				console.log("pollito fbx cargado");
-			isWorldReady[6] = true;
-		});*/
-
+	
 		camera.misRayos = [
 			new THREE.Vector3(0,0,1),
 			new THREE.Vector3(0,0,-1),
@@ -224,17 +203,7 @@
 		loadOBJWithMTL("assets/", "box.obj", "box.mtl", (object) => {
 			object.position.z = -30;			
 
-		//	var box2 = object.clone();
-			
-
-			//scene.add(object);
-			
-			//scene.add(box3);
-		//	scene.add(box4);
-		//	scene.add(box5);
-		//	scene.add(box6);
-		//	scene.add(box7);
-		//	scene.add(box8);
+	
 			
 			
 			console.log("boxx cargado 0");
@@ -311,7 +280,7 @@
 			isWorldReady[7] = true;
 		});
 
-		loadOBJWithMTL("models/nuevosModelos/", "pollo.obj", "pollo.mtl", (object) => {
+		loadOBJWithMTL("models/nuevosModelos/", "pollito.obj", "pollito.mtl", (object) => {
 			object.position.z = -15;
 			//object.rotation.x = THREE.Math.degToRad(-90);
 			object.position.x=0;
@@ -333,18 +302,81 @@
 			isWorldReady[6] = true;
 		});*/
 
-		loadOBJWithMTL("models/nuevosModelos/", "escenarioFull.obj", "escenarioFull.mtl", (object) => {
+			var idEsc=getQueryVariable("id");
+	if(idEsc==1){
+		loadOBJWithMTL("models/terrenoPlano/", "terreno1.obj", "terreno1.mtl", (object) => {
 			object.position.z = -0;
 			//object.rotation.x = THREE.Math.degToRad(-90);
 			object.position.x=0;
-			object.position.y=-1;
-			object.scale.set(.1,.1,.1);
+			object.position.y=-10;
+			object.scale.set(.2,.2,.2);
 			scene.add(object);
 			console.log("el escenario completo cargado 9");
 			objects.push(object);
 			isWorldReady[9] = true;
 		});
-
+		loadOBJWithMTL("models/terrenoPlano/", "awaTerreno1.obj", "awaTerreno1.mtl", (object) => {
+			object.position.z = -0;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=0;
+			object.position.y=-10;
+			object.scale.set(.2,.2,.2);
+			scene.add(object);
+			console.log("el escenario completo cargado 9");
+			objects.push(object);
+			isWorldReady[9] = true;
+		});
+		loadOBJWithMTL("models/elementosTerrenoPlano/", "elementosTerreno1.obj", "elementosTerreno1.mtl", (object) => {
+			object.position.z = -0;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=0;
+			object.position.y=-13;
+			object.scale.set(.2,.2,.2);
+			scene.add(object);
+			console.log("el escenario completo cargado 9");
+			objects.push(object);
+			isWorldReady[9] = true;
+		});
+	}else{
+		if(idEsc==2){
+			loadOBJWithMTL("models/terrenoPlano/", "terreno2.obj", "terreno2.mtl", (object) => {
+				object.position.z = -0;
+				//object.rotation.x = THREE.Math.degToRad(-90);
+				object.position.x=0;
+				object.position.y=-1;
+				object.scale.set(.2,.2,.2);
+				scene.add(object);
+				console.log("el escenario completo cargado 9");
+				objects.push(object);
+				isWorldReady[9] = true;
+			});
+		}else{
+			if(idEsc==3){
+				loadOBJWithMTL("models/terrenoPlano/", "terreno3.obj", "terreno3.mtl", (object) => {
+					object.position.z = -200;
+					//object.rotation.x = THREE.Math.degToRad(-90);
+					object.position.x=0;
+					object.position.y=-1;
+					object.scale.set(5,5,5);
+					scene.add(object);
+					console.log("el escenario completo cargado 9");
+					objects.push(object);
+					isWorldReady[9] = true;
+				});
+				loadOBJWithMTL("models/terrenoPlano/", "awaTerreno3.obj", "awaTerreno3.mtl", (object) => {
+					object.position.z = -200;
+					//object.rotation.x = THREE.Math.degToRad(-90);
+					object.position.x=0;
+					object.position.y=-1;
+					object.scale.set(5,5,5);
+					scene.add(object);
+					console.log("el escenario completo cargado 9");
+					objects.push(object);
+					isWorldReady[9] = true;
+				});
+			}
+		}
+	}
 		render();
 
 		document.addEventListener('keydown', onKeyDown);
@@ -410,23 +442,27 @@
 		var jugador1 = scene.getObjectByName("jugador1");
 		var pollito = scene.getObjectByName("pollito");
 		var cubo2 = scene.getObjectByName("jugador2");
+
 		var yaw = 0;
 		var forward = 0;
+		var subir=0;
+		var lados = 0;
+		
 		var yaw2 = 0;
 		var forward2 = 0;
+		
 		if(gamepads[0] != null){
 			
 
   			if(gamepads[0].axes[0] >.9){
 
-  				//derecha derecha +, izquierda -
+  				lados = -20;
   			}
 
-  			if(gamepads[0].axes[1] >.001){
 
   			if(gamepads[0].axes[0] <-.9){
 
-  				lados = -20;  //derecha derecha +, izquierda -
+  				lados = 20;  //derecha derecha +, izquierda -
   			}
 
 
@@ -455,12 +491,12 @@
 
   			if(gamepads[0].axes[1] >.9){
 
-  				forward = 20;// derecha abajo +, arriba -
+  				forward = -20;// derecha abajo +, arriba -
   			}
 
   			if(gamepads[0].axes[1] <-.9){
 
-  				forward = -20;// derecha abajo +, arriba -
+  				forward = 20;// derecha abajo +, arriba -
   			}
 
   			if(gamepads[0].buttons[7].pressed){//gatillo derecho
@@ -500,12 +536,20 @@
 		}
 
 		if (keys["A"]) {
-		//	yaw = 5;
+
+		let vector = new THREE.Vector3();
+			camera.getWorldDirection( vector );
+
+			alert("X  = " + vector.x +  "   Y  = " + vector.y +"  Z  = " + vector.z);
+
+			keys["A"]=false;
 		} else if (keys["D"]) {
-		//	yaw = -5;
+	alert("RX  = " + camera.rotation.x +  "   RY  = " + camera.rotation.y +"  RZ  = " + camera.rotation.z);
+	keys["D"]=false;
 		}
 		if (keys["W"]) {
-		//	forward = -20;
+		alert("pX  = " + camera.position.x +  "  pY  = " + camera.position.y +"  pZ  = " + camera.position.z);
+		keys["W"]=false;
 		} else if (keys["S"]) {
 		//	forward = 20;
 		}
@@ -537,8 +581,6 @@
 			
 		
 
-			cubo.rotation.y += yaw * deltaTime;
-			cubo.translateZ(forward * deltaTime);
 
 			camera2.rotation.y += yaw2 * deltaTime;
 			camera2.translateZ(forward2 * deltaTime);
@@ -618,7 +660,7 @@
 		$("#scene-section").append(renderer.domElement);
 		$("#scene-section2").append(renderer2.domElement);
 	}
-}
+
 
 	</script>
 </head>
