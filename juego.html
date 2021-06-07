@@ -87,6 +87,8 @@
             		this.modelo=modelo;
             		this.nombre=nombre;
 					this.reloj  = new THREE.Clock();
+					this.id = id;
+					
             			}
 
             	agregarProyectil(posicion,vector){
@@ -142,15 +144,19 @@
             				if(distancia < 10){
             					if(this.id==1){
             						puntuacion1+=100;
-            						
+            						var puntiaion = document.getElementById("puntuacionJ1");
+            						puntiaion.innerHTML = "puntuacion: " + puntuacion1;
 
             					}
             					else{
             						puntuacion2+=100;
+            							var puntiaion = document.getElementById("puntuacionJ2");
+            						puntiaion.innerHTML = "puntuacion: " + puntuacion2;
 
             					}
             					
             					objetivos.Objetivodado(j);
+
             						var objeto = scene.getObjectByName(this.nombresProyectil[i]);
             						scene.remove(objeto);
 									this.VectorProyectil.splice(i, 1);
@@ -229,9 +235,12 @@
 
 				let vector = new THREE.Vector3();
 				
-				
+				var original = new THREE.Vector3();
 			
 				camara.getWorldDirection( vector );
+
+			
+				
 
 				objeto.position.x += vector.x * foward * deltaTime;
 				objeto.position.z += vector.z * foward * deltaTime;
@@ -271,16 +280,96 @@
 				camara.rotateX(-subir * deltaTime);
 				//objeto.rotateOnAxis(myAxis2,subir * deltaTime);
 			}
-}
 
+			var colisiones;
+	/*object.misRayos = [
+			new THREE.Vector3(0,0,1),
+			new THREE.Vector3(0,0,-1),
+			new THREE.Vector3(1,0,0),
+			new THREE.Vector3(-1,0,0)
+		];*/
+				
+				//.far = 30;
+				rayCaster.near = 0.00001;
+				/*if(PRUEBA){
+					console.log("Nuevos");*/
+				for(let i = 0;i<objeto.misRayos.length;i++){
+
+				let rayo = objeto.misRayos[i];
+
+				rayCaster.set(objeto.position,rayo);
+			
+				 colisiones = rayCaster.intersectObjects(objects,true); // modelos y si sus hijos cuentan o
+
+				/* if(i==0){
+				 	 console.log( "derecha: "+ colisiones.length);
+				 }
+
+				  if(i==1){
+				 console.log( "norte: "+ colisiones.length);
+				}	
+				 if(i==2){
+				console.log( "sur: "+ colisiones.length);
+				 }
+				 if(i==3){
+				console.log(  "izqueirda: "+ colisiones.length);
+				PRUEBA=false;
+				 }*/
+
+
+				if(colisiones.length > 0){
+					
+				 /*if(i==0){
+				 	 console.log( "distancia derecha: "+ colisiones[0].distance);
+				 }
+
+				 if(i==1){
+				 console.log( "distancia norte: "+ colisiones[0].distance);
+				}	
+				 if(i==2){
+				console.log( "distancia sur: "+ colisiones[0].distance);
+				 }
+				 if(i==3){
+				console.log(  "distancia izqueirda: "+ colisiones[0].distance);
+				 }*/
+
+
+			
+				if (colisiones[0].distance < 5) {
+					
+					
+				objeto.position.x -= vector.x * foward * deltaTime;
+				objeto.position.z -= vector.z * foward * deltaTime;
+
+
+				jugador.position.x -= vector.x * foward * deltaTime;
+				jugador.position.z -= vector.z * foward * deltaTime;
+
+				objeto.translateX(-lados*deltaTime);
+				jugador.translateX(lados*deltaTime);	
+			
+				}
+
+			}
+
+			}
+		/*}*/
+			
+			
+		
+}	
+
+	var rayCaster = new THREE.Raycaster();
 	var scene;
 	var camera;
 	var camera2;
 	var renderer;
 	var renderer2;
 	var controls;
+	var relojfinal = null;
 	//var objs= [];
 	var objects = [];
+	var PRUEBA = false;
 
 	var proyectiles;
 	var proyectiles2;
@@ -291,7 +380,7 @@
 	var clock;
 	var deltaTime;	
 	var keys = {};
-	var rayCaster;
+	
 	var isWorldReady = [ false, false,false ,false,false,false,false,false,false,false];
 	var pausa = false;
 	var mixers = [];
@@ -324,7 +413,7 @@
                 }, 1000);
             });
 			setupScene();
-		rayCaster = new THREE.Raycaster();
+
 
 
 		var loader = new THREE.FBXLoader();
@@ -344,6 +433,12 @@
 
 			ancla.name="jugador1";
 			object.name = "pollito";
+			object.misRayos = [
+			new THREE.Vector3(0,0,1),
+			new THREE.Vector3(0,0,-1),
+			new THREE.Vector3(1,0,0),
+			new THREE.Vector3(-1,0,0)
+		];
 			//object.position.z=-10;
 			ancla.add(camera);
 			ancla.camera;
@@ -365,13 +460,6 @@
 
 	
 	
-		camera.misRayos = [
-			new THREE.Vector3(0,0,1),
-			new THREE.Vector3(0,0,-1),
-			new THREE.Vector3(1,0,0),
-			new THREE.Vector3(-1,0,0),
-			new THREE.Vector3(0,-1,0)
-		];
 		
 		
 
@@ -410,7 +498,7 @@
 			object.position.x=-30;
 			object.position.y=5;
 			object.scale.set(.1,.1,.1);
-			proyectiles = new classproyectiles(object,"Jugador1",1);
+			
 			//scene.add(object);
 			console.log("diana solita cuerdita cargado 3");
 			isWorldReady[3] = true;
@@ -451,12 +539,19 @@
 
 			ancla.name="jugador2";
 			object.name = "lobo";
+			object.misRayos = [
+			new THREE.Vector3(0,0,1),
+			new THREE.Vector3(0,0,-1),
+			new THREE.Vector3(1,0,0),
+			new THREE.Vector3(-1,0,0)
+		];
 			//object.position.z=-10;
 			ancla.add(camera2);
 			ancla.camera2;
 			camera2.position.z=5;
 			camera2.position.y=5;
 			//camera.rotation.y= THREE.Math.degToRad(180);
+			proyectiles = new classproyectiles(object,"Jugador2",2);
 			scene.add(object);
 			scene.add(ancla);
 
@@ -470,7 +565,7 @@
 			object.position.x=0;
 			object.position.y=0;
 			object.scale.set(.01,.01,.01);
-			proyectiles2 = new classproyectiles(object,"Jugador2",2);
+			proyectiles2 = new classproyectiles(object,"Jugador1",1);
 			//scene.add(object);
 			console.log("pollo cargado 8");
 			isWorldReady[8] = true;
@@ -496,7 +591,7 @@
 			object.scale.set(.2,.2,.2);
 			scene.add(object);
 			console.log("el escenario completo cargado 9");
-			objects.push(object);
+			//objects.push(object);
 			isWorldReady[9] = true;
 		});
 		loadOBJWithMTL("models/terrenoPlano/", "awaTerreno1.obj", "awaTerreno1.mtl", (object) => {
@@ -507,7 +602,7 @@
 			object.scale.set(.2,.2,.2);
 			scene.add(object);
 			console.log("el escenario completo cargado 9");
-			objects.push(object);
+			//objects.push(object);
 			isWorldReady[9] = true;
 		});
 		loadOBJWithMTL("models/elementosTerrenoPlano/", "elementosTerreno1.obj", "elementosTerreno1.mtl", (object) => {
@@ -770,6 +865,10 @@
   				camera.getWorldDirection( vector );
   				camera.getWorldPosition ( vector2 );
   				proyectiles2.agregarProyectil(vector2,vector);
+		} else if (keys["M"]) {
+
+			PRUEBA=true;
+
 		}
 
 
@@ -781,7 +880,9 @@
 
 		
 			/*MovimientosJugador( camara,  objeto,  foward, yaw, lados,subir)*/
-
+		if (relojfinal == null) {
+			relojfinal = new THREE.Clock();
+		}
 			let vector = new THREE.Vector3();
 
 			MovimientosJugador( camera2,  lobo,  forward2, yaw2, lados2,subir2,jugador2);
@@ -793,10 +894,17 @@
  			
 			proyectiles.ActualizarProyectiles();
 			proyectiles2.ActualizarProyectiles();
+
 			proyectiles.buscarproyectil(objetivos);
 			proyectiles2.buscarproyectil(objetivos);
+
 			objetivos.ActualizarObjetivos();
 
+			var timer = document.getElementById("textoTiempo");
+			var pasado = relojfinal.getElapsedTime();
+		 	pasado = parseInt(pasado.toString(),"10");
+			pasado = 180 - pasado;
+			timer.innerHTML = "Time: "+ pasado;
 
 			/*camera2.rotation.y += yaw2 * deltaTime;
 			camera2.translateZ(forward2 * deltaTime);
@@ -804,25 +912,7 @@
 			cubo2.rotation.y += yaw2 * deltaTime;
 			cubo2.translateZ(forward2 * deltaTime);*/
 
-			for(var i = 0;i<camera.misRayos.length;i++){
-
-				var rayo =camera.misRayos[i];
-
-				rayCaster.set(camera.position,rayo);
-
-				var colisiones = rayCaster.intersectObjects(objects,true); // modelos y si sus hijos cuentan o no
-
-			}
-			
-			
-			if(colisiones.length > 0){
-			
-				if (colisiones[0].distance < 1) {
-					
-					camera.translateZ-(forward * deltaTime);
-				}
-
-			}
+		
 			//objs.forEach(({mixer}) => {mixer.update(clock.getDelta());});
 		}
 		}
@@ -888,9 +978,9 @@
 	<div style ="width: 49%; 	border: 2px solid yellow;" id="scene-section"/></div>
 	<div  style ="width: 49%; 	border: 2px solid yellow;" id="scene-section2"/></div>
 	<div>
-		<h2 id="puntuacionJ1">puntuacion 1</h2>
-		<h2 id="puntuacionJ2">puntuacion 2</h2>
-		<h2 id="textoTiempo">Time</h2>
+		<h2 id="puntuacionJ1">puntuacion 1:0</h2>
+		<h2 id="puntuacionJ2">puntuacion 2:0</h2>
+		<h2 id="textoTiempo">Time:180</h2>
 
 	</div>
 	<div class="mPausa">
