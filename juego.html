@@ -191,15 +191,17 @@
             	posicionaparecer = new Array();
             	tamaobjetivoaparecer = new Array();
             	Agregar(posision,tamano,modelo){
+					var modelo2=modelo.clone();
             		this.Posiciionobjetivo.push(posision);
             		this.tamaobjetivo.push(tamano);
-            		modelo.name ="Objetivo"+this.cantidad;
-            		this.nombreobjetivo.push(modelo.name);
-            		modelo.position.x = posision.x;
-            		modelo.position.y = posision.y;
-            		modelo.position.z = posision.z;
-            		scene.add(modelo);
+            		modelo2.name ="Objetivo"+this.cantidad;
+            		this.nombreobjetivo.push(modelo2.name);
+            		modelo2.position.x = posision.x;
+            		modelo2.position.y = posision.y;
+            		modelo2.position.z = posision.z;
+            		scene.add(modelo2);
             		this.cantidad++;
+
             	}
             	ActualizarObjetivos(){
             		for(var i=0;i<this.tiempoenaparecer.length;i++){
@@ -349,7 +351,7 @@
 				if (colisiones[0].distance < 5) {
 					
 					
-				objeto.position.x -= vector.x * foward * deltaTime;
+				/*objeto.position.x -= vector.x * foward * deltaTime;
 				objeto.position.z -= vector.z * foward * deltaTime;
 
 
@@ -357,7 +359,7 @@
 				jugador.position.z -= vector.z * foward * deltaTime;
 
 				objeto.translateX(-lados*deltaTime);
-				jugador.translateX(lados*deltaTime);	
+				jugador.translateX(lados*deltaTime);*/
 			
 				}
 
@@ -468,75 +470,12 @@
 
 		});
 
-	
-	
-		
-		
-
 			var material2 = new THREE.MeshLambertMaterial({
 			color: new THREE.Color(0.0,0.0,0.5)
 		});
 
 
 		
-
-
-		loadOBJWithMTL("models/nuevosModelos/", "dianaGrande.obj", "dianaGrande.mtl", (object) => {
-			object.position.z = -10;
-			//object.rotation.x = THREE.Math.degToRad(-90);
-			object.scale.set(.1,.1,.1);
-			objetivos.Agregar(object.position,1,object);
-			//scene.add(object);
-			console.log("Diana grande cargado 1");
-			isWorldReady[1] = true;
-		});
-
-		loadOBJWithMTL("models/nuevosModelos/", "dianaSobrePalito.obj", "dianaSobrePalito.mtl", (object) => {
-			object.position.z = -30;
-			//object.rotation.x = THREE.Math.degToRad(-90);
-			object.position.x=30;
-			object.scale.set(.1,.1,.1);
-			objetivos.Agregar(object.position,1,object);
-			//scene.add(object);
-			console.log("Diana sobre Palito cargado 2");
-			isWorldReady[2] = true;
-		});
-
-		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaCuerdita.obj", "dianaSolitaCuerdita.mtl", (object) => {
-			object.position.z = -30;
-			//object.rotation.x = THREE.Math.degToRad(-90);
-			object.position.x=-30;
-			object.position.y=5;
-			object.scale.set(.1,.1,.1);
-			
-			//scene.add(object);
-			console.log("diana solita cuerdita cargado 3");
-			isWorldReady[3] = true;
-		});
-
-		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaGancho.obj", "dianaSolitaGancho.mtl", (object) => {
-			object.position.z = -30;
-			//object.rotation.x = THREE.Math.degToRad(-90);
-			object.position.x=0;
-			object.position.y=5;
-			object.scale.set(.1,.1,.1);
-			objetivos.Agregar(object.position,1,object);
-			
-			console.log("diana solita gancho cargado 4"); 
-			isWorldReady[4] = true;
-		});
-
-		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaGancho.obj", "dianaSolitaGancho.mtl", (object) => {
-			object.position.z = 0;
-			//object.rotation.x = THREE.Math.degToRad(-90);
-			object.position.x=30;
-			object.position.y=0;
-			object.scale.set(.1,.1,.1);
-
-			//scene.add(object);
-			isWorldReady[5] = true;
-			console.log("diana solita gancho x2 cargado 5");
-		});
 		loadOBJWithMTL("models/nuevosModelos/", "lobo.obj", "lobo.mtl", (object) => {
 					
 
@@ -591,8 +530,97 @@
 			isWorldReady[6] = true;
 		});*/
 
-			var idEsc=getQueryVariable("id");
+	var idEsc=getQueryVariable("id");
 	if(idEsc==1){
+		loadOBJWithMTL("models/nuevosModelos/", "dianaGrande.obj", "dianaGrande.mtl", (object) => {
+			object.position.z = -10;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.scale.set(.1,.1,.1);
+			objetivos.Agregar(object.position,1,object);
+			//scene.add(object);
+			console.log("Diana grande cargado 1");
+			isWorldReady[1] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSobrePalito.obj", "dianaSobrePalito.mtl", (object) => {
+			object.position.z = -30;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=30;
+			object.scale.set(.1,.1,.1);
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=15;
+			object.position.y=-2;
+			object.position.z=192;
+			objetivos.Agregar(object.position,1,object);
+			//scene.add(object);
+			console.log("Diana sobre Palito cargado 2");
+			isWorldReady[2] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaCuerdita.obj", "dianaSolitaCuerdita.mtl", (object) => {
+			object.position.z = -30;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=-30;
+			object.position.y=5;
+			object.scale.set(.2,.2,.2);
+			object.position.x=-27;
+			object.position.y=34;
+			object.position.z=-57;
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=-108;
+			object.position.y=10;
+			object.position.z=4.25;
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=-7;
+			object.position.y=10;
+			object.position.z=-115;
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=95;
+			object.position.y=10;
+			object.position.z=-120;
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=139;
+			object.position.y=15;
+			object.position.z=-40;
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=114;
+			object.position.y=8;
+			object.position.z=116;
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=-123;
+			object.position.y=6;
+			object.position.z=189;
+			objetivos.Agregar(object.position,1,object);
+			
+			//scene.add(object);
+			console.log("diana solita cuerdita cargado 3");
+			isWorldReady[3] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaGancho.obj", "dianaSolitaGancho.mtl", (object) => {
+			object.position.z = -30;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=0;
+			object.position.y=5;
+			object.scale.set(.1,.1,.1);
+			objetivos.Agregar(object.position,1,object);
+			
+			console.log("diana solita gancho cargado 4"); 
+			isWorldReady[4] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaGancho.obj", "dianaSolitaGancho.mtl", (object) => {
+			object.position.z = 0;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=30;
+			object.position.y=0;
+			object.scale.set(.1,.1,.1);
+
+			//scene.add(object);
+			isWorldReady[5] = true;
+			console.log("diana solita gancho x2 cargado 5");
+		});
+
 		loadOBJWithMTL("models/terrenoPlano/", "terreno1.obj", "terreno1.mtl", (object) => {
 			object.position.z = -0;
 			//object.rotation.x = THREE.Math.degToRad(-90);
@@ -602,7 +630,7 @@
 			scene.add(object);
 			console.log("el escenario completo cargado 9");
 			//objects.push(object);
-			isWorldReady[9] = true;
+			isWorldReady[6] = true;
 		});
 		loadOBJWithMTL("models/terrenoPlano/", "awaTerreno1.obj", "awaTerreno1.mtl", (object) => {
 			object.position.z = -0;
@@ -628,6 +656,93 @@
 		});
 	}else{
 		if(idEsc==2){
+			loadOBJWithMTL("models/nuevosModelos/", "dianaGrande.obj", "dianaGrande.mtl", (object) => {
+			object.position.z = -10;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.scale.set(.1,.1,.1);
+			object.position.x=139;
+			object.position.y=-3;
+			object.position.z=262;
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=-43;
+			object.position.y=-3;
+			object.position.z=-196;
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=-137;
+			object.position.y=-3;
+			object.position.z=-51;
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=22;
+			object.position.y=-3;
+			object.position.z=260
+			objetivos.Agregar(object.position,1,object);
+			//scene.add(object);
+			console.log("Diana grande cargado 1");
+			isWorldReady[1] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSobrePalito.obj", "dianaSobrePalito.mtl", (object) => {
+			object.position.z = -30;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=30;
+			object.scale.set(.1,.1,.1);
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=132;
+			object.position.y=-2;
+			object.position.z=163;
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=169;
+			object.position.y=-2;
+			object.position.z=-69;
+			objetivos.Agregar(object.position,1,object);
+			//scene.add(object);
+			console.log("Diana sobre Palito cargado 2");
+			isWorldReady[2] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaCuerdita.obj", "dianaSolitaCuerdita.mtl", (object) => {
+			object.position.z = 276;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=-124;
+			object.position.y=10;
+			object.scale.set(.2,.2,.2);
+			object.position.x=87;
+			object.position.y=35;
+			object.position.z=0;
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=-120;
+			object.position.y=10;
+			object.position.z=254;
+			objetivos.Agregar(object.position,1,object);
+			
+			//scene.add(object);
+			console.log("diana solita cuerdita cargado 3");
+			isWorldReady[3] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaGancho.obj", "dianaSolitaGancho.mtl", (object) => {
+			object.position.z = -30;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=0;
+			object.position.y=5;
+			object.scale.set(.1,.1,.1);
+			objetivos.Agregar(object.position,1,object);
+			
+			console.log("diana solita gancho cargado 4"); 
+			isWorldReady[4] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaGancho.obj", "dianaSolitaGancho.mtl", (object) => {
+			object.position.z = 0;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=30;
+			object.position.y=0;
+			object.scale.set(.1,.1,.1);
+
+			//scene.add(object);
+			isWorldReady[5] = true;
+			console.log("diana solita gancho x2 cargado 5");
+		});
 			loadOBJWithMTL("models/terrenoPlano/", "terreno2.obj", "terreno2.mtl", (object) => {
 				object.position.z = -0;
 				//object.rotation.x = THREE.Math.degToRad(-90);
@@ -637,7 +752,7 @@
 				scene.add(object);
 				console.log("el escenario completo cargado 9");
 				objects.push(object);
-				isWorldReady[9] = true;
+				isWorldReady[6] = true;
 			});
 			loadOBJWithMTL("models/elementosTerrenoPlano/", "elementosTerreno2.obj", "elementosTerreno2.mtl", (object) => {
 				object.position.z = -0;
@@ -652,6 +767,90 @@
 			});
 		}else{
 			if(idEsc==3){
+				loadOBJWithMTL("models/nuevosModelos/", "dianaGrande.obj", "dianaGrande.mtl", (object) => {
+			object.position.z = -10;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.scale.set(.1,.1,.1);
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=-159;
+			object.position.y=0;
+			object.position.z=77;
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=-76;
+			object.position.y=0;
+			object.position.z=166;
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=46;
+			object.position.y=0;
+			object.position.z=-86;
+			objetivos.Agregar(object.position,1,object);
+			//scene.add(object);
+			console.log("Diana grande cargado 1");
+			isWorldReady[1] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSobrePalito.obj", "dianaSobrePalito.mtl", (object) => {
+			object.position.z = -75;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=-118;
+			object.position.y=-1;
+			object.scale.set(.1,.1,.1);
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=17;
+			object.position.y=-1;
+			object.position.z=266;
+			objetivos.Agregar(object.position,1,object);
+			//scene.add(object);
+			console.log("Diana sobre Palito cargado 2");
+			isWorldReady[2] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaCuerdita.obj", "dianaSolitaCuerdita.mtl", (object) => {
+			object.position.z = -30;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=-30;
+			object.position.y=5;
+			object.scale.set(.25,.25,.25);
+			object.position.x=-161;
+			object.position.y=15;
+			object.position.z=-83;
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=312;
+			object.position.y=20;
+			object.position.z=66;
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=122;
+			object.position.y=15;
+			object.position.z=138;
+			objetivos.Agregar(object.position,1,object);
+			//scene.add(object);
+			console.log("diana solita cuerdita cargado 3");
+			isWorldReady[3] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaGancho.obj", "dianaSolitaGancho.mtl", (object) => {
+			object.position.z = -30;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=0;
+			object.position.y=5;
+			object.scale.set(.1,.1,.1);
+			objetivos.Agregar(object.position,1,object);
+			
+			console.log("diana solita gancho cargado 4"); 
+			isWorldReady[4] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaGancho.obj", "dianaSolitaGancho.mtl", (object) => {
+			object.position.z = 0;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=30;
+			object.position.y=0;
+			object.scale.set(.1,.1,.1);
+
+			//scene.add(object);
+			isWorldReady[5] = true;
+			console.log("diana solita gancho x2 cargado 5");
+		});
 				loadOBJWithMTL("models/terrenoPlano/", "terreno3.obj", "terreno3.mtl", (object) => {
 					object.position.z = -200;
 					//object.rotation.x = THREE.Math.degToRad(-90);
@@ -661,7 +860,7 @@
 					scene.add(object);
 					console.log("el escenario completo cargado 9");
 					objects.push(object);
-					isWorldReady[9] = true;
+					isWorldReady[6] = true;
 				});
 				loadOBJWithMTL("models/terrenoPlano/", "awaTerreno3.obj", "awaTerreno3.mtl", (object) => {
 					object.position.z = -200;
@@ -888,8 +1087,10 @@
   				proyectiles2.agregarProyectil(vector2,vector);
 		} else if (keys["M"]) {
 
-			PRUEBA=true;
-
+			//PRUEBA=true;
+			let vector = new THREE.Vector3();
+			camera2.getWorldPosition ( vector );
+			console.log(vector);
 		}
 
 
