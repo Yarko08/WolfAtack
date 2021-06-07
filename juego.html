@@ -75,15 +75,183 @@
 	<link rel="stylesheet" href="CSS/pausa.css">
 	<script type="text/javascript">
 
-			
+			$(".btn-Retornar").click(function () {
+                $(".mPausa").css("visibility", "hidden");
+                pauseGame = false;
+            });
 
+
+            $(".btn-Menu").click(function () {
+                setTimeout(function () {
+                    window.location.href = 'index.html';
+                }, 1000);
+            });
+
+            class classproyectiles {
+            	cantidad=0;
+            	speed=3;
+            	reloj;
+            	PosicionProyectil = new Array();
+            	VectorProyectil = new Array();
+            	nombresProyectil = new Array();
+            	constructor(modelo,nombre,id) {
+            		this.modelo=modelo;
+            		this.nombre=nombre;
+					this.reloj  = new THREE.Clock();
+					this.id = id;
+					
+            			}
+
+            	agregarProyectil(posicion,vector){
+            		
+            		if(this.reloj.getElapsedTime() >  1 || this.cantidad==0){
+            		var modeloclonado = this.modelo.clone();
+            		modeloclonado.name = this.nombre+"proyectil"+this.cantidad;
+            		this.PosicionProyectil.push(posicion);
+            		this.nombresProyectil.push(modeloclonado.name );
+            		this.cantidad++;
+            		modeloclonado.position.x=posicion.x;
+            		modeloclonado.position.y=posicion.y;
+            		modeloclonado.position.z=posicion.z;
+            		this.reloj.start();
+            		this.VectorProyectil.push(vector);
+            		scene.add(modeloclonado);
+            	}
+            	}		
+
+
+            	ActualizarProyectiles(){
+
+            		for(var i=0;i<this.nombresProyectil.length;i++){
+				
+					var objeto = scene.getObjectByName(this.nombresProyectil[i]);
+					objeto.position.x += this.VectorProyectil[i].x * this.speed;
+					objeto.position.y += this.VectorProyectil[i].y * this.speed;
+					objeto.position.z += this.VectorProyectil[i].z * this.speed;
+
+					this.PosicionProyectil[i].x = objeto.position.x;
+					this.PosicionProyectil[i].z = objeto.position.z;
+					this.PosicionProyectil[i].y = objeto.position.y;
+
+
+
+					objeto.rotation.x += this.speed;
+					objeto.rotation.z += this.speed;
+					if(objeto.position.distanceTo(this.PosicionProyectil[i])>100){
+						scene.remove(objeto);
+						this.VectorProyectil.splice(i, 1);
+						this.nombresProyectil.splice(i, 1);
+						this.PosicionProyectil.splice(i, 1);
+						i--;
+            		}
+            	}	
+            	}
+
+
+            	buscarproyectil(objetivos){
+            		for(var i=0;i<this.PosicionProyectil.length;i++){
+            			for(var j=0;j<objetivos.Posiciionobjetivo.length;j++){
+            				var distancia =this.PosicionProyectil[i].distanceTo(objetivos.Posiciionobjetivo[j]);
+            				if(distancia < 10){
+            					if(this.id==1){
+            						puntuacion1+=100;
+            						var puntiaion = document.getElementById("puntuacionJ1");
+            						puntiaion.innerHTML = "puntuacion: " + puntuacion1;
+
+            					}
+            					else{
+            						puntuacion2+=100;
+            							var puntiaion = document.getElementById("puntuacionJ2");
+            						puntiaion.innerHTML = "puntuacion: " + puntuacion2;
+
+            					}
+            					
+            					objetivos.Objetivodado(j);
+
+            						var objeto = scene.getObjectByName(this.nombresProyectil[i]);
+            						scene.remove(objeto);
+									this.VectorProyectil.splice(i, 1);
+									this.nombresProyectil.splice(i, 1);
+									this.PosicionProyectil.splice(i, 1);
+
+            				}
+            			}
+            		}
+            	}
+            	}	
+
+            class classobjetivos {
+            	cantidad = 0;
+            	Posiciionobjetivo = new Array();
+            	tamaobjetivo = new Array();
+            	nombreobjetivo = new Array();
+
+            	tiempoenaparecer = new Array();
+            	nombreenaparecer = new Array();
+            	posicionaparecer = new Array();
+            	tamaobjetivoaparecer = new Array();
+            	Agregar(posision,tamano,modelo){
+            		this.Posiciionobjetivo.push(posision);
+            		this.tamaobjetivo.push(tamano);
+            		modelo.name ="Objetivo"+this.cantidad;
+            		this.nombreobjetivo.push(modelo.name);
+            		modelo.position.x = posision.x;
+            		modelo.position.y = posision.y;
+            		modelo.position.z = posision.z;
+            		scene.add(modelo);
+            		this.cantidad++;
+            	}
+            	ActualizarObjetivos(){
+            		for(var i=0;i<this.tiempoenaparecer.length;i++){
+            			if(this.tiempoenaparecer[i].getElapsedTime() >2){
+
+            		this.nombreobjetivo.push(this.nombreenaparecer[i]);
+            		this.tamaobjetivo.push(this.tamaobjetivoaparecer[i]);
+            		this.Posiciionobjetivo.push(this.posicionaparecer[i]);
+            	
+
+            		var objeto = scene.getObjectByName(this.nombreenaparecer[i]);
+            		objeto.visible = true;
+
+            			this.tamaobjetivoaparecer.push(new THREE.Clock()); 	
+            			this.nombreenaparecer.splice(i, 1);
+						this.posicionaparecer.splice(i, 1);
+						this.tiempoenaparecer.splice(i, 1);
+
+            			}
+
+            		}
+
+            	}
+
+            	Objetivodado(id){
+            		this.nombreenaparecer.push(this.nombreobjetivo[id]);
+            		this.tamaobjetivoaparecer.push(this.tamaobjetivo[id]);
+            		this.posicionaparecer.push(this.Posiciionobjetivo[id]);
+            		this.tiempoenaparecer.push(new THREE.Clock()); 	
+
+            		var objeto = scene.getObjectByName(this.nombreobjetivo[id]);
+            		objeto.visible = false;
+
+            			this.nombreobjetivo.splice(id, 1);
+						this.tamaobjetivo.splice(id, 1);
+						this.Posiciionobjetivo.splice(id, 1);
+						
+
+
+            	}
+            }
+            
 			function MovimientosJugador( camara,  objeto,  foward, yaw, lados,subir,jugador) {
 
 				let vector = new THREE.Vector3();
 				
-				
+				var original = new THREE.Vector3();
 			
 				camara.getWorldDirection( vector );
+
+			
+				
 
 				objeto.position.x += vector.x * foward * deltaTime;
 				objeto.position.z += vector.z * foward * deltaTime;
@@ -124,22 +292,106 @@
 				//objeto.rotateOnAxis(myAxis2,subir * deltaTime);
 			}
 
+			var colisiones;
+	/*object.misRayos = [
+			new THREE.Vector3(0,0,1),
+			new THREE.Vector3(0,0,-1),
+			new THREE.Vector3(1,0,0),
+			new THREE.Vector3(-1,0,0)
+		];*/
+				
+				//.far = 30;
+				rayCaster.near = 0.00001;
+				/*if(PRUEBA){
+					console.log("Nuevos");*/
+				for(let i = 0;i<objeto.misRayos.length;i++){
+
+				let rayo = objeto.misRayos[i];
+
+				rayCaster.set(objeto.position,rayo);
 			
+				 colisiones = rayCaster.intersectObjects(objects,true); // modelos y si sus hijos cuentan o
+
+				/* if(i==0){
+				 	 console.log( "derecha: "+ colisiones.length);
+				 }
+
+				  if(i==1){
+				 console.log( "norte: "+ colisiones.length);
+				}	
+				 if(i==2){
+				console.log( "sur: "+ colisiones.length);
+				 }
+				 if(i==3){
+				console.log(  "izqueirda: "+ colisiones.length);
+				PRUEBA=false;
+				 }*/
 
 
-}
+				if(colisiones.length > 0){
+					
+				 /*if(i==0){
+				 	 console.log( "distancia derecha: "+ colisiones[0].distance);
+				 }
+
+				 if(i==1){
+				 console.log( "distancia norte: "+ colisiones[0].distance);
+				}	
+				 if(i==2){
+				console.log( "distancia sur: "+ colisiones[0].distance);
+				 }
+				 if(i==3){
+				console.log(  "distancia izqueirda: "+ colisiones[0].distance);
+				 }*/
+
+
+			
+				if (colisiones[0].distance < 5) {
+					
+					
+				objeto.position.x -= vector.x * foward * deltaTime;
+				objeto.position.z -= vector.z * foward * deltaTime;
+
+
+				jugador.position.x -= vector.x * foward * deltaTime;
+				jugador.position.z -= vector.z * foward * deltaTime;
+
+				objeto.translateX(-lados*deltaTime);
+				jugador.translateX(lados*deltaTime);	
+			
+				}
+
+			}
+
+			}
+		/*}*/
+			
+			
+		
+}	
+
+	var rayCaster = new THREE.Raycaster();
 	var scene;
 	var camera;
 	var camera2;
 	var renderer;
 	var renderer2;
 	var controls;
-	var objs= [];
+	var relojfinal = null;
+	//var objs= [];
 	var objects = [];
+	var PRUEBA = false;
+
+	var proyectiles;
+	var proyectiles2;
+	var puntuacion1=0;
+	var puntuacion2=0;
+	var objetivos = new classobjetivos();
+
 	var clock;
 	var deltaTime;	
 	var keys = {};
-	var rayCaster;
+	
 	var isWorldReady = [ false, false,false ,false,false,false,false,false,false,false];
 	var pausa = false;
 	var mixers = [];
@@ -191,6 +443,12 @@
 
 			ancla.name="jugador1";
 			object.name = "pollito";
+			object.misRayos = [
+			new THREE.Vector3(0,0,1),
+			new THREE.Vector3(0,0,-1),
+			new THREE.Vector3(1,0,0),
+			new THREE.Vector3(-1,0,0)
+		];
 			//object.position.z=-10;
 			ancla.add(camera);
 			ancla.camera;
@@ -200,9 +458,7 @@
 			scene.add(object);
 			scene.add(ancla);
 
-			var material2 = new THREE.MeshLambertMaterial({
-			color: new THREE.Color(0.0,0.0,0.5)
-		});
+		
 
 			isWorldReady[6] = true;;
 			console.log("cargar pollito normal terminado 6 ");
@@ -214,13 +470,6 @@
 
 	
 	
-		camera.misRayos = [
-			new THREE.Vector3(0,0,1),
-			new THREE.Vector3(0,0,-1),
-			new THREE.Vector3(1,0,0),
-			new THREE.Vector3(-1,0,0),
-			new THREE.Vector3(0,-1,0)
-		];
 		
 		
 
@@ -229,33 +478,15 @@
 		});
 
 
-			var geometry2 = new THREE.BoxGeometry(1,1,1);
-			var ancla2 = new THREE.Object3D();
-			var cubo2  = new THREE.Mesh(geometry2,material2);
-			ancla2.name="jugador2";
-			cubo2.scale.set(5,5,5);
-			cubo2.position.z=-10;
-			ancla2.add(cubo2);
-			scene.add(ancla2);
-			
-		loadOBJWithMTL("assets/", "box.obj", "box.mtl", (object) => {
-			object.position.z = -30;			
+		
 
-	
-			
-			
-			console.log("boxx cargado 0");
-			isWorldReady[0] = true;
-		});
-
-	
 
 		loadOBJWithMTL("models/nuevosModelos/", "dianaGrande.obj", "dianaGrande.mtl", (object) => {
 			object.position.z = -10;
 			//object.rotation.x = THREE.Math.degToRad(-90);
 			object.scale.set(.1,.1,.1);
-
-			scene.add(object);
+			objetivos.Agregar(object.position,1,object);
+			//scene.add(object);
 			console.log("Diana grande cargado 1");
 			isWorldReady[1] = true;
 		});
@@ -265,8 +496,8 @@
 			//object.rotation.x = THREE.Math.degToRad(-90);
 			object.position.x=30;
 			object.scale.set(.1,.1,.1);
-
-			scene.add(object);
+			objetivos.Agregar(object.position,1,object);
+			//scene.add(object);
 			console.log("Diana sobre Palito cargado 2");
 			isWorldReady[2] = true;
 		});
@@ -277,8 +508,8 @@
 			object.position.x=-30;
 			object.position.y=5;
 			object.scale.set(.1,.1,.1);
-
-			scene.add(object);
+			
+			//scene.add(object);
 			console.log("diana solita cuerdita cargado 3");
 			isWorldReady[3] = true;
 		});
@@ -289,8 +520,8 @@
 			object.position.x=0;
 			object.position.y=5;
 			object.scale.set(.1,.1,.1);
-
-			scene.add(object);
+			objetivos.Agregar(object.position,1,object);
+			
 			console.log("diana solita gancho cargado 4"); 
 			isWorldReady[4] = true;
 		});
@@ -302,18 +533,38 @@
 			object.position.y=0;
 			object.scale.set(.1,.1,.1);
 
-			scene.add(object);
+			//scene.add(object);
 			isWorldReady[5] = true;
 			console.log("diana solita gancho x2 cargado 5");
 		});
 		loadOBJWithMTL("models/nuevosModelos/", "lobo.obj", "lobo.mtl", (object) => {
-			object.position.z = -15;
-			//object.rotation.x = THREE.Math.degToRad(-90);
-			object.position.x=15;
-			object.position.y=0;
-			object.scale.set(.1,.1,.1);
+					
 
+			object.scale.set(.05,.05,.05);
+			object.rotateY(THREE.Math.degToRad(180));
+		var ancla = new THREE.Object3D();
+			ancla.position.x=0;
+			ancla.position.z=0;
+			ancla.position.y=0;
+
+			ancla.name="jugador2";
+			object.name = "lobo";
+			object.misRayos = [
+			new THREE.Vector3(0,0,1),
+			new THREE.Vector3(0,0,-1),
+			new THREE.Vector3(1,0,0),
+			new THREE.Vector3(-1,0,0)
+		];
+			//object.position.z=-10;
+			ancla.add(camera2);
+			ancla.camera2;
+			camera2.position.z=5;
+			camera2.position.y=5;
+			//camera.rotation.y= THREE.Math.degToRad(180);
+			proyectiles = new classproyectiles(object,"Jugador2",2);
 			scene.add(object);
+			scene.add(ancla);
+
 			console.log("lobo cargado 7");
 			isWorldReady[7] = true;
 		});
@@ -324,8 +575,8 @@
 			object.position.x=0;
 			object.position.y=0;
 			object.scale.set(.01,.01,.01);
-
-			scene.add(object);
+			proyectiles2 = new classproyectiles(object,"Jugador1",1);
+			//scene.add(object);
 			console.log("pollo cargado 8");
 			isWorldReady[8] = true;
 		});
@@ -350,7 +601,7 @@
 			object.scale.set(.2,.2,.2);
 			scene.add(object);
 			console.log("el escenario completo cargado 9");
-			objects.push(object);
+			//objects.push(object);
 			isWorldReady[9] = true;
 		});
 		loadOBJWithMTL("models/terrenoPlano/", "awaTerreno1.obj", "awaTerreno1.mtl", (object) => {
@@ -361,7 +612,7 @@
 			object.scale.set(.2,.2,.2);
 			scene.add(object);
 			console.log("el escenario completo cargado 9");
-			objects.push(object);
+			//objects.push(object);
 			isWorldReady[9] = true;
 		});
 		loadOBJWithMTL("models/elementosTerrenoPlano/", "elementosTerreno1.obj", "elementosTerreno1.mtl", (object) => {
@@ -501,7 +752,8 @@
 		deltaTime = clock.getDelta();	
 		var jugador1 = scene.getObjectByName("jugador1");
 		var pollito = scene.getObjectByName("pollito");
-		var cubo2 = scene.getObjectByName("jugador2");
+		var jugador2 = scene.getObjectByName("jugador2");
+		var lobo = scene.getObjectByName("lobo");
 
 		var yaw = 0;
 		var forward = 0;
@@ -510,58 +762,64 @@
 		
 		var yaw2 = 0;
 		var forward2 = 0;
-		
+		var lados2 = 0;
+		var subir2 = 0;
+		if(!pausa){
 		if(gamepads[0] != null){
 			
 
   			if(gamepads[0].axes[0] >.9){
 
-  				lados = -20;
+  				lados2 = -20;
   			}
 
 
   			if(gamepads[0].axes[0] <-.9){
 
-  				lados = 20;  //derecha derecha +, izquierda -
+  				lados2 = 20;  //derecha derecha +, izquierda -
   			}
 
 
   			if(gamepads[0].axes[3] >.9){
 
-  				 subir = -3;// izquierda abajo +, arriba -
+  				 subir2 = -3;// izquierda abajo +, arriba -
   				
   			}
 
   			if(gamepads[0].axes[3] <-.9){
 
-  				subir = 3; // izquierda abajo +, arriba -
+  				subir2 = 3; // izquierda abajo +, arriba -
   				
   			}
 
   			if(gamepads[0].axes[2] >.9){
 
-  			yaw = -5;//izqueirda derecha +, izquierda -
+  			yaw2 = -5;//izqueirda derecha +, izquierda -
   			}
 
   			if(gamepads[0].axes[2] <-.9){
 
-  				yaw = 5;
+  				yaw2 = 5;
   			}
 
 
   			if(gamepads[0].axes[1] >.9){
 
-  				forward = -20;// derecha abajo +, arriba -
+  				forward2 = -20;// derecha abajo +, arriba -
   			}
 
   			if(gamepads[0].axes[1] <-.9){
 
-  				forward = 20;// derecha abajo +, arriba -
+  				forward2 = 20;// derecha abajo +, arriba -
   			}
 
   			if(gamepads[0].buttons[7].pressed){//gatillo derecho
-
-  				alert("disparo");
+  				let vector = new THREE.Vector3();
+  				let vector2 = new THREE.Vector3();
+  				camera2.getWorldDirection( vector );
+  				camera2.getWorldPosition ( vector2 );
+  			
+  				proyectiles.agregarProyectil(vector2,vector);
   			}
   		if (gamepads[0].buttons[9].pressed) {
   			
@@ -577,9 +835,10 @@
 			}
 		
 			keys["P"] = false;
+			gamepads[0].buttons[9].pressed=false;
   		}};
 
-		if (keys["P"]) {
+		if (keys["P"] ) {
 			if(pausa  )
 			{
 				pausa=false;
@@ -597,82 +856,87 @@
 
 		if (keys["A"]) {
 
-		let vector = new THREE.Vector3();
-			camera.getWorldDirection( vector );
-
-			alert("X  = " + vector.x +  "   Y  = " + vector.y +"  Z  = " + vector.z);
-
-			keys["A"]=false;
+			lados = 20;
 		} else if (keys["D"]) {
-			alert("RX  = " + camera.rotation.x +  "   RY  = " + camera.rotation.y +"  RZ  = " + camera.rotation.z);
-			keys["D"]=false;
+			lados = -20;
+
 		}
 		if (keys["W"]) {
-			let vector = new THREE.Vector3();
+			forward = 20;
 
-            camera.getWorldPosition ( vector );
-		alert("pX  = " + vector.x +  "  pY  = " + vector.y +"  pZ  = " + vector.z);
-		keys["W"]=false;
 		} else if (keys["S"]) {
-		//	forward = 20;
+			forward = -20;
 		}
 
 	
 		if (keys["J"]) {
-			yaw2 = 5;
+			yaw = 5;
 		} else if (keys["L"]) {
-			yaw2 = -5;
+			yaw = -5;
 		}
 		if (keys["I"]) {
-			forward2 = -20;
+			subir = 3;
 		} else if (keys["K"]) {
-			forward2 = 20;
+			subir = -3;
+		}
+
+		 else if (keys["O"]) {
+			let vector = new THREE.Vector3();
+  				let vector2 = new THREE.Vector3();
+  				camera.getWorldDirection( vector );
+  				camera.getWorldPosition ( vector2 );
+  				proyectiles2.agregarProyectil(vector2,vector);
+		} else if (keys["M"]) {
+
+			PRUEBA=true;
+
 		}
 
 
 
-		if (isWorldReady[0] && isWorldReady[1] && isWorldReady[2]
+		if (isWorldReady[1] && isWorldReady[2]
 		&& isWorldReady[3] && isWorldReady[4] && isWorldReady[5]
 		&& isWorldReady[6] && isWorldReady[7] && isWorldReady[8]
-		&& isWorldReady[9] && !pausa) {
+		&& isWorldReady[9]) {
 
 		
 			/*MovimientosJugador( camara,  objeto,  foward, yaw, lados,subir)*/
+		if (relojfinal == null) {
+			relojfinal = new THREE.Clock();
+		}
+			let vector = new THREE.Vector3();
 
-
+			MovimientosJugador( camera2,  lobo,  forward2, yaw2, lados2,subir2,jugador2);
 			MovimientosJugador( camera,  pollito,  forward, yaw, lados,subir,jugador1);
 			
-		
 
 
-			camera2.rotation.y += yaw2 * deltaTime;
+  			camera.getWorldDirection( vector );
+ 			
+			proyectiles.ActualizarProyectiles();
+			proyectiles2.ActualizarProyectiles();
+
+			proyectiles.buscarproyectil(objetivos);
+			proyectiles2.buscarproyectil(objetivos);
+
+			objetivos.ActualizarObjetivos();
+
+			var timer = document.getElementById("textoTiempo");
+			var pasado = relojfinal.getElapsedTime();
+		 	pasado = parseInt(pasado.toString(),"10");
+			pasado = 180 - pasado;
+			timer.innerHTML = "Time: "+ pasado;
+
+			/*camera2.rotation.y += yaw2 * deltaTime;
 			camera2.translateZ(forward2 * deltaTime);
 
 			cubo2.rotation.y += yaw2 * deltaTime;
-			cubo2.translateZ(forward2 * deltaTime);
+			cubo2.translateZ(forward2 * deltaTime);*/
 
-			for(var i = 0;i<camera.misRayos.length;i++){
-
-				var rayo =camera.misRayos[i];
-
-				rayCaster.set(camera.position,rayo);
-
-				var colisiones = rayCaster.intersectObjects(objects,true); // modelos y si sus hijos cuentan o no
-
-			}
-			
-			console.log(colisiones.length);
-			if(colisiones.length > 0){
-			
-				if (colisiones[0].distance < 1) {
-					
-					camera.translateZ-(forward * deltaTime);
-				}
-
-			}
+		
 			//objs.forEach(({mixer}) => {mixer.update(clock.getDelta());});
 		}
-		
+		}
 		renderer.render(scene, camera);
 		renderer2.render(scene, camera2);
 	}
@@ -685,8 +949,8 @@
 		camera2 = new THREE.PerspectiveCamera(75, visibleSize.width / visibleSize.height, 0.1, 10000);
 		//camera.position.z = 2;
 		
-		camera2.position.z = 2;
-		camera2.position.y = 5;
+		//camera2.position.z = 2;
+		//camera2.position.y = 5;
 		//controls = new THREE.GamepadControls( camera );
 		renderer = new THREE.WebGLRenderer( {precision: "mediump" } );
 		renderer.setClearColor(new THREE.Color(0, 0, 0));
@@ -735,9 +999,9 @@
 	<div style ="width: 49%; 	border: 2px solid yellow;" id="scene-section"/></div>
 	<div  style ="width: 49%; 	border: 2px solid yellow;" id="scene-section2"/></div>
 	<div>
-		<h2 id="puntuacionJ1">puntuacion 1</h2>
-		<h2 id="puntuacionJ2">puntuacion 2</h2>
-		<h2 id="textoTiempo">Time</h2>
+		<h2 id="puntuacionJ1">puntuacion 1:0</h2>
+		<h2 id="puntuacionJ2">puntuacion 2:0</h2>
+		<h2 id="textoTiempo">Time:180</h2>
 
 	</div>
 	<div class="mPausa">
