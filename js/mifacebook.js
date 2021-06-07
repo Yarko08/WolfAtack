@@ -16,11 +16,22 @@ window.fbAsyncInit = function() {
  }(document, 'script', 'facebook-jssdk'));
 
 
-function shareScore(score) {
-  FB.ui({
-    method: 'share',
-    href:'https://google.com',
-    hashtag: "#MiMejorMarca",
-    quote: "Mi puntuacion"+score
-  }, function(response){});
+function shareScore(score,score2) {
+ 
+  if(score>score2){
+    FB.ui({
+      method: 'share',
+      href:'https://youtu.be/miomuSGoPzI',
+      hashtag: "#Ganador",
+      quote: "Mi puntuacion"+score
+    }, function(response){});
+  }else{
+      FB.ui({
+        method: 'share',
+        href:'https://youtu.be/miomuSGoPzI',
+        hashtag: "#Ganador",
+        quote: "Mi puntuacion"+score2
+      }, function(response){});
+  }
+  
 }

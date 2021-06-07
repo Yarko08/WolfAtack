@@ -40,6 +40,8 @@
 			top: 10vh;
             left: 25%;
 			color: rgb(67, 67, 158);
+			border-radius:10px ;
+			border-width: 3px;
 			font-weight: bolder;
     		font-family: 'Akaya Kanadaka', cursive;
            
@@ -54,7 +56,9 @@
 			z-index: 100;
 			position:fixed;
 			top: 10vh;
-          left: 25%;
+          	left: 25%;
+			border-radius:10px ;
+			border-width: 3px;
 			color: rgb(163, 19, 26);
             font-weight: bolder;
     		font-family: 'Akaya Kanadaka', cursive;
@@ -72,21 +76,11 @@
 	<script type="text/javascript" src="js/libs/three/inflate.min.js"></script>  
 	<script type="text/javascript" src ="js/THREE.GamepadControls.js"></script>
 	<script type="text/javascript" src ="js/Controles.js"></script>
+	<script type="text/javascript" src ="js/mifacebook.js"></script>
 	<link rel="stylesheet" href="CSS/pausa.css">
 	<script type="text/javascript">
-
-			$(".btn-Retornar").click(function () {
-                $(".mPausa").css("visibility", "hidden");
-                pausa = false;
-                  relojfinal.reanudar();
-            });
-
-
-            $(".btn-Menu").click(function () {
-                setTimeout(function () {
-                    window.location.href = 'index.html';
-                }, 1000);
-            });
+			
+			
 
             class classproyectiles {
             	cantidad=0;
@@ -101,7 +95,7 @@
 					this.reloj  = new THREE.Clock();
 					this.id = id;
 					
-            			}
+            		}
 
             	agregarProyectil(posicion,vector){
             		
@@ -460,7 +454,29 @@
 
 	
 	$(document).ready(function() {
+		$("#facebook").click(function () {
+				
+                var nombreJugador = $("#nombreganador").val();
+				shareScore(puntuacion1,puntuacion2);
+            });
+			$("#facebook2").click(function () {
+				
+                var nombreJugador = $("#nombreganador2").val();
+				shareScore(puntuacion1,puntuacion2);
+            });
 
+			$(".btn-Retornar").click(function () {
+                $(".mPausa").css("visibility", "hidden");
+                pausa = false;
+                  relojfinal.reanudar();
+            });
+
+
+            $(".btn-Menu").click(function () {
+                setTimeout(function () {
+                    window.location.href = 'index.html';
+                }, 1000);
+            });
 		        
 		function getQueryVariable(variable) {
         	var query = window.location.search.substring(1);
@@ -501,13 +517,24 @@
 		var loader = new THREE.FBXLoader();
 		
 
-		loadOBJWithMTL("models/nuevosModelos/", "pollito.obj", "pollito.mtl", (object) => {
+		loadOBJWithMTL("models/", "huevo.obj", "huevo.mtl", (object) => {
 			object.position.z = -15;
 			//object.rotation.x = THREE.Math.degToRad(-90);
 			object.position.x=0;
 			object.position.y=0;
 			object.scale.set(.01,.01,.01);
 			proyectiles2 = new classproyectiles(object,"Jugador1",1);
+			//scene.add(object);
+			console.log("pollo cargado 8");
+			isWorldReady[8] = true;
+		});
+		loadOBJWithMTL("models/", "piedra.obj", "piedra.mtl", (object) => {
+			object.position.z = -15;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=0;
+			object.position.y=0;
+			object.scale.set(.1,.1,.1);
+			proyectiles = new classproyectiles(object,"Jugador2",2);
 			//scene.add(object);
 			console.log("pollo cargado 8");
 			isWorldReady[8] = true;
@@ -596,7 +623,7 @@
 			camera2.position.z=5;
 			camera2.position.y=5;
 			//camera.rotation.y= THREE.Math.degToRad(180);
-			proyectiles = new classproyectiles(object,"Jugador2",2);
+			
 			scene.add(object);
 			scene.add(ancla);
 			var jugador2 = scene.getObjectByName("jugador2");
@@ -611,13 +638,13 @@
 		loadOBJWithMTL("models/nuevosModelos/", "dianaGrande.obj", "dianaGrande.mtl", (object) => {
 			object.position.z = -10;
 			//object.rotation.x = THREE.Math.degToRad(-90);
-			object.scale.set(.1,.1,.1);
+			object.scale.set(.2,.2,.2);
 			let vector = new THREE.Vector3(0,0,0);
+			object.position.x=64;
+			object.position.y=-3;
+			object.position.z=144;
 			objetivos.Agregar(object.position,1,object,vector);
-
-			object.position.z = 10;
-
-			objetivos.Agregar(object.position,1,object,vector);
+			
 			//scene.add(object);
 			console.log("Diana grande cargado 1");
 			isWorldReady[1] = true;
@@ -627,14 +654,18 @@
 			object.position.z = -30;
 			//object.rotation.x = THREE.Math.degToRad(-90);
 			object.position.x=30;
-			object.scale.set(.1,.1,.1);
+			object.scale.set(.2,.2,.2);
 		
 			let vector = new THREE.Vector3(0,0,0);
-			vector.x=10;
-			objetivos.Agregar(object.position,1,object,vector);
-			object.position.x=15;
+			vector.y=THREE.Math.degToRad(90);
+			object.position.x=-115;
 			object.position.y=-2;
-			object.position.z=192;
+			object.position.z=-75;
+			objetivos.Agregar(object.position,1,object,vector);
+			vector.y=THREE.Math.degToRad(180);
+			object.position.x=-28;
+			object.position.y=-2;
+			object.position.z=140;
 			objetivos.Agregar(object.position,1,object,vector);
 			//scene.add(object);
 			console.log("Diana sobre Palito cargado 2");
@@ -657,10 +688,12 @@
 			object.position.y=10;
 			object.position.z=4.25;
 			objetivos.Agregar(object.position,1,object,vector);
+			vector.y=THREE.Math.degToRad(45);
 			object.position.x=-7;
 			object.position.y=10;
 			object.position.z=-115;
 			objetivos.Agregar(object.position,1,object,vector);
+			vector.y=THREE.Math.degToRad(0);
 			object.position.x=95;
 			object.position.y=10;
 			object.position.z=-120;
@@ -669,10 +702,13 @@
 			object.position.y=15;
 			object.position.z=-40;
 			objetivos.Agregar(object.position,1,object,vector);
+			vector.y=THREE.Math.degToRad(180);
 			object.position.x=114;
 			object.position.y=8;
 			object.position.z=116;
 			objetivos.Agregar(object.position,1,object,vector);
+			
+			vector.y=THREE.Math.degToRad(-90);
 			object.position.x=-123;
 			object.position.y=6;
 			object.position.z=189;
@@ -688,10 +724,10 @@
 			//object.rotation.x = THREE.Math.degToRad(-90);
 			object.position.x=0;
 			object.position.y=5;
-			object.scale.set(.1,.1,.1);
+			object.scale.set(0,0,0);
 
 			let vector = new THREE.Vector3(0,0,0);
-			objetivos.Agregar(object.position,1,object,vector);
+			//objetivos.Agregar(object.position,1,object,vector);
 			
 			console.log("diana solita gancho cargado 4"); 
 			isWorldReady[4] = true;
@@ -702,7 +738,7 @@
 			//object.rotation.x = THREE.Math.degToRad(-90);
 			object.position.x=30;
 			object.position.y=0;
-			object.scale.set(.1,.1,.1);
+			object.scale.set(0,0,0);
 
 			//scene.add(object);
 			isWorldReady[5] = true;
@@ -750,9 +786,7 @@
 
 		object.rotation.y = THREE.Math.degToRad(180);
 		object.scale.set(.1,.1,.1);
-	
 
-		
 		var ancla = new THREE.Object3D();
 			ancla.position.x=10;
 			ancla.position.z=10;
@@ -792,7 +826,7 @@
 
 		
 
-			isWorldReady[6] = true;;
+			isWorldReady[6] = true;
 			console.log("cargar pollito normal terminado 6 ");
 
 
@@ -857,25 +891,33 @@
 			loadOBJWithMTL("models/nuevosModelos/", "dianaGrande.obj", "dianaGrande.mtl", (object) => {
 			object.position.z = -10;
 			//object.rotation.x = THREE.Math.degToRad(-90);
-			object.scale.set(.1,.1,.1);
+			object.scale.set(.2,.2,.2);
+			let vector = new THREE.Vector3(0,0,0);
+			vector.y=THREE.Math.degToRad(180);
 			object.position.x=139;
 			object.position.y=-3;
 			object.position.z=262;
-			objetivos.Agregar(object.position,1,object);
+			objetivos.Agregar(object.position,1,object,vector);
 			object.position.x=-43;
 			object.position.y=-3;
 			object.position.z=-196;
-			objetivos.Agregar(object.position,1,object);
+			objetivos.Agregar(object.position,1,object,vector);
+			vector.y=THREE.Math.degToRad(45);
 			object.position.x=-137;
 			object.position.y=-3;
 			object.position.z=-51;
-			objetivos.Agregar(object.position,1,object);
+			objetivos.Agregar(object.position,1,object,vector);
+			vector.y=THREE.Math.degToRad(180);
 			object.position.x=22;
 			object.position.y=-3;
-			object.position.z=260
-			objetivos.Agregar(object.position,1,object);
-			let vector = new THREE.Vector3(0,0,0);
+			object.position.z=260;
 			objetivos.Agregar(object.position,1,object,vector);
+			vector.y=THREE.Math.degToRad(90);
+			object.position.x=-139;
+			object.position.y=-3;
+			object.position.z=43;
+			objetivos.Agregar(object.position,1,object,vector);
+			
 			//scene.add(object);
 			console.log("Diana grande cargado 1");
 			isWorldReady[1] = true;
@@ -885,20 +927,29 @@
 			object.position.z = -30;
 			//object.rotation.x = THREE.Math.degToRad(-90);
 			object.position.x=30;
-			object.scale.set(.1,.1,.1);
-			objetivos.Agregar(object.position,1,object);
-			object.position.x=132;
+			object.scale.set(.2,.2,.2);
+			let vector = new THREE.Vector3(0,0,0);
+			
+			objetivos.Agregar(object.position,1,object,vector);
+			object.position.x=142;
 			object.position.y=-2;
-			object.position.z=163;
-			objetivos.Agregar(object.position,1,object);
+			object.position.z=167;
+			objetivos.Agregar(object.position,1,object,vector);
 			object.position.x=169;
 			object.position.y=-2;
 			object.position.z=-69;
-			objetivos.Agregar(object.position,1,object);
-			let vector = new THREE.Vector3(0,0,0);
 			objetivos.Agregar(object.position,1,object,vector);
-			object.position.x=15;
+			vector.y=THREE.Math.degToRad(90);
+			object.position.x=-79;
+			object.position.y=-2;
+			object.position.z=140;
 			objetivos.Agregar(object.position,1,object,vector);
+			vector.y=THREE.Math.degToRad(45);
+			object.position.x=-34;
+			object.position.y=-2;
+			object.position.z=22;
+			objetivos.Agregar(object.position,1,object,vector);
+			
 			//scene.add(object);
 			console.log("Diana sobre Palito cargado 2");
 			isWorldReady[2] = true;
@@ -909,15 +960,21 @@
 			//object.rotation.x = THREE.Math.degToRad(-90);
 			object.position.x=-124;
 			object.position.y=10;
-			object.scale.set(.2,.2,.2);
+			object.scale.set(.25,.25,.25);
+			let vector = new THREE.Vector3(0,0,0);
 			object.position.x=87;
 			object.position.y=35;
 			object.position.z=0;
-			objetivos.Agregar(object.position,1,object);
+			objetivos.Agregar(object.position,1,object,vector);
 			object.position.x=-120;
 			object.position.y=10;
 			object.position.z=254;
-			objetivos.Agregar(object.position,1,object);
+			objetivos.Agregar(object.position,1,object,vector);
+			vector.y=THREE.Math.degToRad(90);
+			object.position.x=-85;
+			object.position.y=50;
+			object.position.z=249;
+			objetivos.Agregar(object.position,1,object,vector);
 			
 			//scene.add(object);
 			console.log("diana solita cuerdita cargado 3");
@@ -929,7 +986,7 @@
 			//object.rotation.x = THREE.Math.degToRad(-90);
 			object.position.x=0;
 			object.position.y=5;
-			object.scale.set(.1,.1,.1);
+			object.scale.set(0,0,0);
 			let vector = new THREE.Vector3(0,0,0);
 			objetivos.Agregar(object.position,1,object,vector);
 			
@@ -942,7 +999,7 @@
 			//object.rotation.x = THREE.Math.degToRad(-90);
 			object.position.x=30;
 			object.position.y=0;
-			object.scale.set(.1,.1,.1);
+			object.scale.set(0,0,0);
 
 			//scene.add(object);
 			isWorldReady[5] = true;
@@ -955,9 +1012,9 @@
 				object.position.y=-1;
 				object.scale.set(.2,.2,.2);
 				scene.add(object);
-				console.log("el escenario completo cargado 9");
+				console.log("el terreno 8");
 				objects.push(object);
-				isWorldReady[6] = true;
+				isWorldReady[8] = true;
 			});
 			loadOBJWithMTL("models/elementosTerrenoPlano/", "elementosTerreno2.obj", "elementosTerreno2.mtl", (object) => {
 				object.position.z = -0;
@@ -977,27 +1034,25 @@
 			
 
 
-		object.rotation.y = THREE.Math.degToRad(180);
-		object.scale.set(.1,.1,.1);
-	
+				object.rotation.y = THREE.Math.degToRad(180);
+				object.scale.set(.1,.1,.1);
+					
+				var ancla = new THREE.Object3D();
+				ancla.position.x=10;
+				ancla.position.z=10;
+				object.position.x=10;
+				object.position.z=10;
 
-		
-		var ancla = new THREE.Object3D();
-			ancla.position.x=10;
-			ancla.position.z=10;
-			object.position.x=10;
-			object.position.z=10;
+				ancla.position.y=0;
 
-			ancla.position.y=0;
-
-			ancla.name="jugador1";
-			object.name = "pollito";
-			object.misRayos = [
-			new THREE.Vector3(0,0,1),
-			new THREE.Vector3(0,0,-1),
-			new THREE.Vector3(1,0,0),
-			new THREE.Vector3(-1,0,0)
-		];
+				ancla.name="jugador1";
+				object.name = "pollito";
+				object.misRayos = [
+				new THREE.Vector3(0,0,1),
+				new THREE.Vector3(0,0,-1),
+				new THREE.Vector3(1,0,0),
+				new THREE.Vector3(-1,0,0)
+				];
 			//object.position.z=-10;
 			ancla.add(camera);
 			ancla.camera;
@@ -1069,21 +1124,27 @@
 				loadOBJWithMTL("models/nuevosModelos/", "dianaGrande.obj", "dianaGrande.mtl", (object) => {
 			object.position.z = -10;
 			//object.rotation.x = THREE.Math.degToRad(-90);
-			object.scale.set(.1,.1,.1);
-			objetivos.Agregar(object.position,1,object);
+			object.scale.set(.2,.2,.2);
+			let vector = new THREE.Vector3(0,0,0);
+			vector.y=THREE.Math.degToRad(90);
 			object.position.x=-159;
-			object.position.y=0;
+			object.position.y=-2;
 			object.position.z=77;
-			objetivos.Agregar(object.position,1,object);
+			objetivos.Agregar(object.position,1,object,vector);
+			vector.y=THREE.Math.degToRad(180);
 			object.position.x=-76;
-			object.position.y=0;
+			object.position.y=-2;
 			object.position.z=166;
-			objetivos.Agregar(object.position,1,object);
+			objetivos.Agregar(object.position,1,object,vector);
+			vector.y=THREE.Math.degToRad(0);
 			object.position.x=46;
 			object.position.y=0;
 			object.position.z=-86;
-			objetivos.Agregar(object.position,1,object);
-			let vector = new THREE.Vector3(0,0,0);
+			objetivos.Agregar(object.position,1,object,vector);
+			vector.y=THREE.Math.degToRad(180);
+			object.position.x=156;
+			object.position.y=-2;
+			object.position.z=-95;
 			objetivos.Agregar(object.position,1,object,vector);
 			//scene.add(object);
 			console.log("Diana grande cargado 1");
@@ -1092,42 +1153,50 @@
 
 		loadOBJWithMTL("models/nuevosModelos/", "dianaSobrePalito.obj", "dianaSobrePalito.mtl", (object) => {
 			object.position.z = -75;
-			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.rotation.y = THREE.Math.degToRad(45);
 			object.position.x=-118;
 			object.position.y=-1;
-			object.scale.set(.1,.1,.1);
-			objetivos.Agregar(object.position,1,object);
+			
+			object.scale.set(.2,.2,.2);
+			let vector = new THREE.Vector3(0,0,0);
+			objetivos.Agregar(object.position,1,object,vector);
 			object.position.x=17;
 			object.position.y=-1;
 			object.position.z=266;
-			objetivos.Agregar(object.position,1,object);
-			let vector = new THREE.Vector3(0,0,0);
 			objetivos.Agregar(object.position,1,object,vector);
-			object.position.x=15;
+			vector.y=THREE.Math.degToRad(-90);
+			object.position.x=124;
+			object.position.y=-1;
+			object.position.z=13;
 			objetivos.Agregar(object.position,1,object,vector);
+			
+			
 			//scene.add(object);
 			console.log("Diana sobre Palito cargado 2");
 			isWorldReady[2] = true;
 		});
 
 		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaCuerdita.obj", "dianaSolitaCuerdita.mtl", (object) => {
-			object.position.z = -30;
+			object.position.z = -33;
 			//object.rotation.x = THREE.Math.degToRad(-90);
 			object.position.x=-30;
 			object.position.y=5;
 			object.scale.set(.25,.25,.25);
+			let vector = new THREE.Vector3(0,0,0);
+			objetivos.Agregar(object.position,1,object,vector);
 			object.position.x=-161;
 			object.position.y=15;
 			object.position.z=-83;
-			objetivos.Agregar(object.position,1,object);
+			objetivos.Agregar(object.position,1,object,vector);
 			object.position.x=312;
 			object.position.y=20;
 			object.position.z=66;
-			objetivos.Agregar(object.position,1,object);
+			objetivos.Agregar(object.position,1,object,vector);
+			vector.y=THREE.Math.degToRad(180);
 			object.position.x=122;
 			object.position.y=15;
 			object.position.z=138;
-			objetivos.Agregar(object.position,1,object);
+			objetivos.Agregar(object.position,1,object,vector);
 			//scene.add(object);
 			console.log("diana solita cuerdita cargado 3");
 			isWorldReady[3] = true;
@@ -1138,7 +1207,7 @@
 			//object.rotation.x = THREE.Math.degToRad(-90);
 			object.position.x=0;
 			object.position.y=5;
-			object.scale.set(.1,.1,.1);
+			object.scale.set(0,0,0);
 			let vector = new THREE.Vector3(0,0,0);
 			objetivos.Agregar(object.position,1,object,vector);
 			
@@ -1151,7 +1220,7 @@
 			//object.rotation.x = THREE.Math.degToRad(-90);
 			object.position.x=30;
 			object.position.y=0;
-			object.scale.set(.1,.1,.1);
+			object.scale.set(0,0,0);
 
 			//scene.add(object);
 			isWorldReady[5] = true;
@@ -1177,7 +1246,7 @@
 					scene.add(object);
 					console.log("el escenario completo cargado 9");
 					objects.push(object);
-					isWorldReady[9] = true;
+					isWorldReady[8] = true;
 				});
 				loadOBJWithMTL("models/elementosTerrenoPlano/", "elementosTerreno3.obj", "elementosTerreno3.mtl", (object) => {
 					object.position.z = -200;
@@ -1557,6 +1626,7 @@
 			<h4 id="puntJ1">Puntuacion final</h4>
 			<input type="text" id="nombreganador" placeholder="Pon tu nombre ">
 			<button id="btnfinal" class="btn btn-Retornar">Aceptar</button>
+			<button id="facebook" >Compartir en facebook</button>
 		</center>
 		<center>
 			<img src="CSS/botonOpciones.png" alt="nombresito" style="height: 150px; width: 150px;">
@@ -1568,8 +1638,9 @@
 		<center>
 			<h3 id="lose">Has ganado</h3>
 			<h4 id="puntJ2">Puntuacion final</h4>
-			<input type="text" id="nombreganador" placeholder="Pon tu nombre ">
+			<input type="text" id="nombreganador2" placeholder="Pon tu nombre ">
 			<button id="btnfinal2" class="btn btn-Retornar">Aceptar</button>
+			<button id="facebook2" >Compartir en facebook</button>
 		</center>
 		<center>
 			<img src="CSS/botonJugar.png" alt="nombresito" style="height: 150px; width: 150px;">
