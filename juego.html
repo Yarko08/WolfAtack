@@ -180,14 +180,19 @@
             	posicionaparecer = new Array();
             	tamaobjetivoaparecer = new Array();
             	Agregar(posision,tamano,modelo){
-            		this.Posiciionobjetivo.push(posision);
+            		var modelo2 = modelo.clone();
+            		modelo2.name ="Objetivo"+this.cantidad;	
+            		scene.add(modelo2);
+            		var posi = scene.getObjectByName(modelo2.name);
+            		var posi2 = posi.getWorldPosition();
+            		this.Posiciionobjetivo.push(posi2);
             		this.tamaobjetivo.push(tamano);
-            		modelo.name ="Objetivo"+this.cantidad;
-            		this.nombreobjetivo.push(modelo.name);
-            		modelo.position.x = posision.x;
-            		modelo.position.y = posision.y;
-            		modelo.position.z = posision.z;
-            		scene.add(modelo);
+            	
+            		this.nombreobjetivo.push(modelo2.name);
+            		modelo2.position.x = posision.x;
+            		modelo2.position.y = posision.y;
+            		modelo2.position.z = posision.z;
+            	
             		this.cantidad++;
             	}
             	ActualizarObjetivos(){
@@ -475,6 +480,10 @@
 			object.position.z = -10;
 			//object.rotation.x = THREE.Math.degToRad(-90);
 			object.scale.set(.1,.1,.1);
+			objetivos.Agregar(object.position,1,object);
+
+			object.position.z = 10;
+
 			objetivos.Agregar(object.position,1,object);
 			//scene.add(object);
 			console.log("Diana grande cargado 1");
