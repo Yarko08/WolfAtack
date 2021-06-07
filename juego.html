@@ -38,11 +38,11 @@
 			z-index: 100;
 			position:fixed;
 			top: 10vh;
-            left: 0%;
+            left: 25%;
 			color: rgb(67, 67, 158);
 			font-weight: bolder;
     		font-family: 'Akaya Kanadaka', cursive;
-            visibility: hidden;
+           
 		}
 		#imgLose{
 			width: 50vw;
@@ -54,11 +54,11 @@
 			z-index: 100;
 			position:fixed;
 			top: 10vh;
-            right: 0%;
+          left: 25%;
 			color: rgb(163, 19, 26);
             font-weight: bolder;
     		font-family: 'Akaya Kanadaka', cursive;
-			visibility: hidden;
+			
 		}
 		
 		
@@ -158,7 +158,6 @@
             						puntuacion1+=100;
             						var puntiaion = document.getElementById("puntuacionJ1");
             						puntiaion.innerHTML = "puntuacion: " + puntuacion1;
-
             					}
             					else{
             						puntuacion2+=100;
@@ -214,7 +213,7 @@
             	}
             	ActualizarObjetivos(){
             		for(var i=0;i<this.tiempoenaparecer.length;i++){
-            			if(this.tiempoenaparecer[i].getElapsedTime() >2){
+            			if(this.tiempoenaparecer[i].getElapsedTime() >10){
 
             		this.nombreobjetivo.push(this.nombreenaparecer[i]);
             		this.tamaobjetivo.push(this.tamaobjetivoaparecer[i]);
@@ -267,7 +266,7 @@
             var pasado = this.relojfinal.getElapsedTime();
             var acumulado2 = parseInt(this.acumulado.toString(),"10"); 
 		 	pasado = parseInt(pasado.toString(),"10");
-			pasado = 180 - pasado - acumulado2;
+			pasado = 150 - pasado - acumulado2;
 				return pasado;
             	}
 
@@ -441,9 +440,28 @@
 	var mixers_2 = [];
 	var persona;
 	
+	var audio = new Audio("assets/dentroJuego.mp3");
+                var Musica = localStorage.getItem("Musica");
+                var volumen = localStorage.getItem("volumen");
+                 if(Musica == null){
+                Musica = "true";
+                 }
+                  if(volumen == null){
+                volumen = "50";
+                 }
+                if(Musica== "true"){
+                 
+                var inte = parseInt(volumen,"10");
+                  audio.volume =  0.1;
+                  audio.loop = true;
+                    }
+                    else
+                    audio.volume=0;
+
 	
 	$(document).ready(function() {
 
+		        
 		function getQueryVariable(variable) {
         	var query = window.location.search.substring(1);
         	var vars = query.split("&");
@@ -1251,7 +1269,7 @@
 		var forward2 = 0;
 		var lados2 = 0;
 		var subir2 = 0;
-		if(relojfinal.tiempo() > 0)
+		if(relojfinal.tiempo() > 0){
 		if(!pausa){
 		if(gamepads[0] != null){
 			
@@ -1302,6 +1320,7 @@
   			}
 
   			if(gamepads[0].buttons[7].pressed){//gatillo derecho
+  				 audio.play();
   				let vector = new THREE.Vector3();
   				let vector2 = new THREE.Vector3();
   				camera2.getWorldDirection( vector );
@@ -1373,6 +1392,7 @@
 		}
 
 		 else if (keys["O"]) {
+		 	 audio.play();
 			let vector = new THREE.Vector3();
   				let vector2 = new THREE.Vector3();
   				camera.getWorldDirection( vector );
@@ -1429,6 +1449,28 @@
 		}
 		renderer.render(scene, camera);
 		renderer2.render(scene, camera2);
+	}
+	else
+	{
+
+		if(puntuacion2>puntuacion1){
+		var ganador = document.getElementById("ganador");
+		ganador.hidden = false;
+		var pun = document.getElementById("puntJ1");
+		pun.innerHTML="Puntuacion final: " + puntuacion2;
+	}
+	else{
+		var ganador = document.getElementById("perdedor");
+		ganador.hidden = false;
+		var pun = document.getElementById("puntJ2");
+		pun.innerHTML="Puntuacion final: " + puntuacion1;
+
+	}
+
+	
+		
+
+	}
 	}
 
 	function setupScene() {		
@@ -1508,25 +1550,32 @@
 			</div>
 		</center>
     </div>
-	<div id="imgWin">
+    <center id = "ganador" hidden="true">
+	<div id="imgWin" >
 		<center>
-			<h3 id="win">Jugador tal, has ganado</h3>
+			<h3 id="win">Has ganado</h3>
 			<h4 id="puntJ1">Puntuacion final</h4>
+			<input type="text" id="nombreganador" placeholder="Pon tu nombre ">
+			<button id="btnfinal" class="btn btn-Retornar">Aceptar</button>
 		</center>
-		
 		<center>
 			<img src="CSS/botonOpciones.png" alt="nombresito" style="height: 150px; width: 150px;">
 		</center>
 	</div>
-	<div id="imgLose">
+	</center>
+	 <center id = "perdedor" hidden="true">
+	 <div id="imgLose">
 		<center>
-			<h3 id="lose">Jugador tal, has perdido</h3>
+			<h3 id="lose">Has ganado</h3>
 			<h4 id="puntJ2">Puntuacion final</h4>
+			<input type="text" id="nombreganador" placeholder="Pon tu nombre ">
+			<button id="btnfinal2" class="btn btn-Retornar">Aceptar</button>
 		</center>
 		<center>
 			<img src="CSS/botonJugar.png" alt="nombresito" style="height: 150px; width: 150px;">
 		</center>
 	</div>
+</center>
 </div>
 </body>
 </html>
