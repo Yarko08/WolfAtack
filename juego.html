@@ -77,10 +77,24 @@
 	<script type="text/javascript" src ="js/THREE.GamepadControls.js"></script>
 	<script type="text/javascript" src ="js/Controles.js"></script>
 	<script type="text/javascript" src ="js/mifacebook.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-database.js"></script> 
 	<link rel="stylesheet" href="CSS/pausa.css">
 	<script type="text/javascript">
 			
-			
+			  var firebaseConfig = {
+    apiKey: "AIzaSyA1q7YTLRznTbTioS8gJP-YDD0xT_ctS1Y",
+    authDomain: "wolf-47ebe.firebaseapp.com",
+    projectId: "wolf-47ebe",
+    storageBucket: "wolf-47ebe.appspot.com",
+    messagingSenderId: "754183308929",
+    appId: "1:754183308929:web:42910aed4e1d26df1a2f80"
+  };
+        // Initialize Firebase
+       firebase.initializeApp(firebaseConfig);
+
+
 
             class classproyectiles {
             	cantidad=0;
@@ -147,7 +161,7 @@
             		for(var i=0;i<this.PosicionProyectil.length;i++){
             			for(var j=0;j<objetivos.Posiciionobjetivo.length;j++){
             				var distancia =this.PosicionProyectil[i].distanceTo(objetivos.Posiciionobjetivo[j]);
-            				if(distancia < 10){
+            				if(distancia < 15){
             					if(this.id==1){
             						puntuacion1+=100;
             						var puntiaion = document.getElementById("puntuacionJ1");
@@ -250,6 +264,7 @@
             	 relojfinal = new THREE.Clock();
             	 cargar = false;
             	 acumulado = 0;
+            	 pausado = false;
             	 iniciar(){
             	 	if(!this.cargar){
             	 		this.cargar= true;
@@ -260,17 +275,26 @@
             var pasado = this.relojfinal.getElapsedTime();
             var acumulado2 = parseInt(this.acumulado.toString(),"10"); 
 		 	pasado = parseInt(pasado.toString(),"10");
-			pasado = 150 - pasado - acumulado2;
-				return pasado;
-            	}
 
+			if(this.pausado){
+					pasado = 120  - acumulado2;
+            	}
+            else
+            	{
+            		pasado = 120 - pasado - acumulado2;
+            	}
+				return pasado;
+			}
 
             	pausar(){
+
             		this.acumulado = this.acumulado +this.relojfinal.getElapsedTime();
+            		this.pausado=true;
             	}
 
             	reanudar(){
             	this.relojfinal.start();
+            	this.pausado=false;
 
             	}
 
@@ -329,12 +353,7 @@
 			}
 
 			var colisiones;
-	/*object.misRayos = [
-			new THREE.Vector3(0,0,1),
-			new THREE.Vector3(0,0,-1),
-			new THREE.Vector3(1,0,0),
-			new THREE.Vector3(-1,0,0)
-		];*/
+
 				
 				//.far = 30;
 				rayCaster.near = 0.00001;
@@ -348,38 +367,11 @@
 			
 				 colisiones = rayCaster.intersectObjects(objects,true); // modelos y si sus hijos cuentan o
 
-				/* if(i==0){
-				 	 console.log( "derecha: "+ colisiones.length);
-				 }
-
-				  if(i==1){
-				 console.log( "norte: "+ colisiones.length);
-				}	
-				 if(i==2){
-				console.log( "sur: "+ colisiones.length);
-				 }
-				 if(i==3){
-				console.log(  "izqueirda: "+ colisiones.length);
-				PRUEBA=false;
-				 }*/
 
 
 				if(colisiones.length > 0){
 					
-				 /*if(i==0){
-				 	 console.log( "distancia derecha: "+ colisiones[0].distance);
-				 }
-
-				 if(i==1){
-				 console.log( "distancia norte: "+ colisiones[0].distance);
-				}	
-				 if(i==2){
-				console.log( "distancia sur: "+ colisiones[0].distance);
-				 }
-				 if(i==3){
-				console.log(  "distancia izqueirda: "+ colisiones[0].distance);
-				 }*/
-
+		
 
 			
 				if (colisiones[0].distance < 5) {
@@ -463,6 +455,46 @@
 				
                 var nombreJugador = $("#nombreganador2").val();
 				shareScore(puntuacion1,puntuacion2);
+            });
+
+            $("#btnfinal").click(function () {
+			
+                var nombreJugador = $("#nombreganador").val();
+ if(nombreJugador == ""){
+				 	alert("pon un nombre");
+				 }
+				 else
+				 {
+       		 var playersDataRef = firebase.database().ref("Puntuacion").child(nombreJugador).set({Jugador:nombreJugador,Puntos:puntuacion2});
+       		 setTimeout(function(){
+       		 	window.location.href = "Puntuaciones.html";
+       		 },3000);
+}
+   
+        			
+        });
+
+
+			
+           
+
+            $("#btnfinal2").click(function () {
+            
+				 var nombreJugador = $("#nombreganador2").val();
+				 if(nombreJugador == ""){
+				 	alert("pon un nombre");
+				 }
+				 else
+				 {
+       		 var playersDataRef = firebase.database().ref("Puntuacion").child(nombreJugador).set({Jugador:nombreJugador,Puntos:puntuacion1});
+       		 setTimeout(function(){
+       		 	window.location.href = "Puntuaciones.html";
+       		 },3000);
+       		}
+
+
+
+				
             });
 
 			$(".btn-Retornar").click(function () {
@@ -803,17 +835,16 @@
 			new THREE.Vector3(1,0,0),
 			new THREE.Vector3(-1,0,0)
 		];	
-		camera2.position.z=5;
-			camera2.position.y=5;
+		
 			//object.position.z=-10;
+			ancla.position.x=10;
+			ancla.position.z=10;
+			object.position.x=10;
+			object.position.z=10;
+		
 			ancla.add(camera);
-			ancla.camera;
-			ancla.position.x=55;
-			ancla.position.z=145;
-			ancla.position.y=10;
-			object.position.x=55;
-			object.position.z=150;
-			object.position.y=5;
+			camera.position.z=5;
+			camera.position.y=5;
 			scene.add(object);
 			scene.add(ancla);
 
@@ -873,7 +904,7 @@
 			camera2.position.z=5;
 			camera2.position.y=5;
 			//camera.rotation.y= THREE.Math.degToRad(180);
-			proyectiles = new classproyectiles(object,"Jugador2",2);
+			//proyectiles = new classproyectiles(object,"Jugador2",2);
 			scene.add(object);
 			scene.add(ancla);
 			var jugador2 = scene.getObjectByName("jugador2");
@@ -1054,13 +1085,13 @@
 				new THREE.Vector3(-1,0,0)
 				];
 			//object.position.z=-10;
-			ancla.add(camera);
-			ancla.camera;
-			camera.position.z=5;
-			camera.position.y=5;
+				ancla.add(camera);
+				ancla.camera;
+				camera.position.z=5;
+				camera.position.y=5;
 			//camera.rotation.y= THREE.Math.degToRad(180);
-			scene.add(object);
-			scene.add(ancla);
+				scene.add(object);
+				scene.add(ancla);
 
 		
 
@@ -1108,7 +1139,7 @@
 			camera2.position.z=5;
 			camera2.position.y=5;
 			//camera.rotation.y= THREE.Math.degToRad(180);
-			proyectiles = new classproyectiles(object,"Jugador2",2);
+			//proyectiles = new classproyectiles(object,"Jugador2",2);
 			scene.add(object);
 			scene.add(ancla);
 			var jugador2 = scene.getObjectByName("jugador2");

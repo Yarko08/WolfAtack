@@ -8,8 +8,79 @@
     <link rel="stylesheet" href="CSS/puntuaciones.css">
     <link href="https://fonts.googleapis.com/css2?family=Akaya+Kanadaka&display=swap" rel="stylesheet">
     <script type="text/javascript" src="js/jquery-3.5.1.min.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-database.js"></script> 
     <script type="text/javascript">
     $(document).ready(function(){
+
+
+         var firebaseConfig = {
+    apiKey: "AIzaSyA1q7YTLRznTbTioS8gJP-YDD0xT_ctS1Y",
+    authDomain: "wolf-47ebe.firebaseapp.com",
+    projectId: "wolf-47ebe",
+    storageBucket: "wolf-47ebe.appspot.com",
+    messagingSenderId: "754183308929",
+    appId: "1:754183308929:web:42910aed4e1d26df1a2f80"
+  };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+     
+        var jugadores = [];
+        var position = 0;
+        var playersDataRef = firebase.database().ref("Puntuacion");
+
+      
+        
+        playersDataRef.once("value", function (snapshot) {
+         
+       
+            snapshot.forEach(function (element) {
+
+                let nameJugador = element.val().Jugador;
+                let scoreLB = element.val().Puntos;
+ 
+                jugadores.push({name:nameJugador,puntos:scoreLB});
+                
+                position += 1;
+            });
+          
+            jugadores.sort((a, b) => b.puntos - a.puntos);
+            /*
+                 <div class="puntuaciones">
+                <p class="name">Nombre jugador</p>
+                <p class="points">puntuacion 1</p>
+            </div>
+            */
+            var listacompleta = document.getElementById("mejoresPuntuaciones");  
+            $("#mejoresPuntuaciones").empty();
+
+            for(var i=0;i<jugadores.length;i++){
+                 var div1 = document.createElement("div");
+                     div1.setAttribute("class","puntuaciones");
+
+                      var p1 = document.createElement("div");
+                     p1.setAttribute("class","name");
+                     p1.innerHTML = jugadores[i].name;
+
+                    var p2 = document.createElement("div");
+                     p2.setAttribute("class","points");
+                     p2.innerHTML = "Puntuacion:" +jugadores[i].puntos;
+
+                     div1.appendChild(p1);
+                     div1.appendChild(p2);
+
+                     listacompleta.appendChild(div1);
+
+
+            }
+
+
+        });
+
+
+
         $('#btnregresar').click(function(){
             window.location.href = "index.html";
         });
