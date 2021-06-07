@@ -191,15 +191,17 @@
             	posicionaparecer = new Array();
             	tamaobjetivoaparecer = new Array();
             	Agregar(posision,tamano,modelo){
+					var modelo2=modelo.clone();
             		this.Posiciionobjetivo.push(posision);
             		this.tamaobjetivo.push(tamano);
-            		modelo.name ="Objetivo"+this.cantidad;
-            		this.nombreobjetivo.push(modelo.name);
-            		modelo.position.x = posision.x;
-            		modelo.position.y = posision.y;
-            		modelo.position.z = posision.z;
-            		scene.add(modelo);
+            		modelo2.name ="Objetivo"+this.cantidad;
+            		this.nombreobjetivo.push(modelo2.name);
+            		modelo2.position.x = posision.x;
+            		modelo2.position.y = posision.y;
+            		modelo2.position.z = posision.z;
+            		scene.add(modelo2);
             		this.cantidad++;
+
             	}
             	ActualizarObjetivos(){
             		for(var i=0;i<this.tiempoenaparecer.length;i++){
@@ -496,6 +498,8 @@
 			//object.rotation.x = THREE.Math.degToRad(-90);
 			object.position.x=30;
 			object.scale.set(.1,.1,.1);
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=15;
 			objetivos.Agregar(object.position,1,object);
 			//scene.add(object);
 			console.log("Diana sobre Palito cargado 2");
@@ -888,8 +892,10 @@
   				proyectiles2.agregarProyectil(vector2,vector);
 		} else if (keys["M"]) {
 
-			PRUEBA=true;
-
+			//PRUEBA=true;
+			let vector = new THREE.Vector3();
+			camera2.getWorldPosition ( vector );
+			console.log(vector);
 		}
 
 
