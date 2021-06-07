@@ -13,11 +13,43 @@
     <script type="text/javascript">
         $(document).ready(function(){
             $('#btnAceptar').click(function(){
+
+
+                      var chek = document.getElementById("cbox1");
+                       var son = document.getElementById("Sonido");
+
+                 localStorage.setItem("Musica", chek.checked);
+                 localStorage.setItem("volumen", son.value);
                 window.location.href = "index.html";
             });
             $('#btnCancelar').click(function(){
                 window.location.href = "index.html";
             });
+
+  
+             var Musica = localStorage.getItem("Musica");
+            var volumen = localStorage.getItem("volumen");
+            if(Musica == null){
+                Musica = "true";
+            }
+            if(volumen == null){
+                volumen = "50";
+            }
+
+            if(Musica== "true"){
+                var chek = document.getElementById("cbox1");
+                chek.checked = true; 
+            }
+            else
+            {
+                 var chek = document.getElementById("cbox1");
+                chek.checked = false; 
+            }
+
+           var inte = parseInt(volumen,"10");
+            var son = document.getElementById("Sonido");
+            son.value=inte;
+
         });
     </script>
 </head>

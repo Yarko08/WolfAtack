@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="CSS//index.css">
     <script type="text/javascript" src="js/jquery-3.5.1.min.js"></script> 
     <script type="text/javascript">
-
+        
         $(document).ready(function(){
             $('#btnJugar').mouseenter(function(){
                 var top = $('#btnJugar').position().top;
@@ -67,10 +67,12 @@
                   "visibility": "hidden" //O lo que desees
                 });
                     });
+
                 $('#btnJugar').click(function(){
                     window.location.href = "elegirEscenario.html";
                     //window.location.href = "juego.html";
                 });
+
                 $('#btnConfig').click(function(){
                     window.location.href = "Configuracion.html";
                 });
@@ -78,6 +80,48 @@
                 $('#btnPuntuaciones').click(function(){
                     window.location.href = "Puntuaciones.html";
                });
+
+
+               // var audio = new Audio("assets/introJuego.mp3");
+                //var Musica = localStorage.getItem("Musica");
+                //var volumen = localStorage.getItem("volumen");
+                // if(Musica == null){
+               // Musica = "true";
+               //  }
+                //  if(volumen == null){
+               // volumen = "100";
+              //   }
+              //  if(Musica== "true"){
+                 
+               // var inte = parseInt(volumen,"10");
+               //   audio.volume =  volumen/100;
+               //   audio.loop = true;
+              
+                var audio = new Audio("assets/introJuego.mp3");
+                var Musica = localStorage.getItem("Musica");
+                var volumen = localStorage.getItem("volumen");
+                 if(Musica == null){
+                Musica = "true";
+                 }
+                  if(volumen == null){
+                volumen = "50";
+                 }
+                if(Musica== "true"){
+                 
+                var inte = parseInt(volumen,"10");
+                  audio.volume =  0.1;
+                  audio.loop = true;
+                    }
+                    else
+                    audio.volume=0;
+
+            $("body").mouseenter(function(){
+
+                  audio.play();
+              });
+               //     }
+
+
         });
       
 
