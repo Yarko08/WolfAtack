@@ -1,7 +1,7 @@
 <html>
 <head>
 	
-	<title>2.3 Colisiones</title>
+	<title>Wolf Attack</title>
 	<style type="text/css">
 		.flex-container{
 		 display: flex;
@@ -28,30 +28,41 @@
 			border-width: 3px;
 			border-color: rgb(238, 151, 20);
         }
-		#puntuacionJ1{
-    		position: absolute;
-			top: 10px;
-    		left: 10px;
-			color: rgb(243, 207, 91);
+		.imgWin{
+			width: 50vw;
+            height: 55vh;
+            background-image: url(CSS/menusWin.png);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+			z-index: 100;
+			position:fixed;
+			top: 10vh;
+            left: 0%;
+			color: rgb(67, 67, 158);
 			font-weight: bolder;
     		font-family: 'Akaya Kanadaka', cursive;
+            visibility: hidden;
 		}
-		#puntuacionJ2{
-			position: absolute;
-			right: 0%;
-			color: rgb(243, 207, 91);
-			font-weight: bolder;
+		.imgLose{
+			width: 50vw;
+            height: 55vh;
+            background-image: url(CSS/menusLose.png);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+			z-index: 100;
+			position:fixed;
+			top: 10vh;
+            right: 0%;
+			color: rgb(163, 19, 26);
+            font-weight: bolder;
     		font-family: 'Akaya Kanadaka', cursive;
+			visibility: hidden;
 		}
-		#textoTiempo{
-    		position: absolute;
-    		left: 50%;
-    		transform: translate(-50%, 0%);
-			color: rgb(243, 207, 91);
-			font-weight: bolder;
-    		font-family: 'Akaya Kanadaka', cursive;
-		}
-	
+		
+		
+
 	</style>
 	<script type="text/javascript" src="js/jquery-3.5.1.min.js"></script> 
 	<script type="text/javascript" src="js/libs/three/three2.js"></script> 
@@ -195,6 +206,7 @@
             		modelo2.position.z = posision.z;
             	
             		this.cantidad++;
+
             	}
             	ActualizarObjetivos(){
             		for(var i=0;i<this.tiempoenaparecer.length;i++){
@@ -376,7 +388,7 @@
 				if (colisiones[0].distance < 5) {
 					
 					
-				objeto.position.x -= vector.x * foward * deltaTime;
+				/*objeto.position.x -= vector.x * foward * deltaTime;
 				objeto.position.z -= vector.z * foward * deltaTime;
 
 
@@ -384,7 +396,7 @@
 				jugador.position.z -= vector.z * foward * deltaTime;
 
 				objeto.translateX(-lados*deltaTime);
-				jugador.translateX(lados*deltaTime);	
+				jugador.translateX(lados*deltaTime);*/
 			
 				}
 
@@ -425,6 +437,7 @@
 	var mixers_2 = [];
 	var persona;
 	
+	
 	$(document).ready(function() {
 
 		function getQueryVariable(variable) {
@@ -454,6 +467,13 @@
             });
 			setupScene();
 
+        $(".btn-Menu").click(function () { 
+            setTimeout(function () {
+                window.location.href = "index.html";
+            }, 1000);
+        });
+		setupScene();
+		rayCaster = new THREE.Raycaster();
 
 
 		var loader = new THREE.FBXLoader();
@@ -461,8 +481,8 @@
 			
 
 
-			object.rotation.y = THREE.Math.degToRad(180);
-			object.scale.set(.1,.1,.1);
+		object.rotation.y = THREE.Math.degToRad(180);
+		object.scale.set(.1,.1,.1);
 	
 
 		
@@ -490,7 +510,7 @@
 
 		
 
-				isWorldReady[6] = true;;
+			isWorldReady[6] = true;;
 			console.log("cargar pollito normal terminado 6 ");
 
 
@@ -498,79 +518,12 @@
 
 		});
 
-	
-	
-		
-		
-
 			var material2 = new THREE.MeshLambertMaterial({
 			color: new THREE.Color(0.0,0.0,0.5)
 		});
 
 
 		
-
-
-		loadOBJWithMTL("models/nuevosModelos/", "dianaGrande.obj", "dianaGrande.mtl", (object) => {
-			object.position.z = -10;
-			//object.rotation.x = THREE.Math.degToRad(-90);
-			object.scale.set(.1,.1,.1);
-			objetivos.Agregar(object.position,1,object);
-
-			object.position.z = 10;
-
-			objetivos.Agregar(object.position,1,object);
-			//scene.add(object);
-			console.log("Diana grande cargado 1");
-			isWorldReady[1] = true;
-		});
-
-		loadOBJWithMTL("models/nuevosModelos/", "dianaSobrePalito.obj", "dianaSobrePalito.mtl", (object) => {
-			object.position.z = -30;
-			//object.rotation.x = THREE.Math.degToRad(-90);
-			object.position.x=30;
-			object.scale.set(.1,.1,.1);
-			objetivos.Agregar(object.position,1,object);
-			//scene.add(object);
-			console.log("Diana sobre Palito cargado 2");
-			isWorldReady[2] = true;
-		});
-
-		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaCuerdita.obj", "dianaSolitaCuerdita.mtl", (object) => {
-			object.position.z = -30;
-			//object.rotation.x = THREE.Math.degToRad(-90);
-			object.position.x=-30;
-			object.position.y=5;
-			object.scale.set(.1,.1,.1);
-			
-			//scene.add(object);
-			console.log("diana solita cuerdita cargado 3");
-			isWorldReady[3] = true;
-		});
-
-		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaGancho.obj", "dianaSolitaGancho.mtl", (object) => {
-			object.position.z = -30;
-			//object.rotation.x = THREE.Math.degToRad(-90);
-			object.position.x=0;
-			object.position.y=5;
-			object.scale.set(.1,.1,.1);
-			objetivos.Agregar(object.position,1,object);
-			
-			console.log("diana solita gancho cargado 4"); 
-			isWorldReady[4] = true;
-		});
-
-		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaGancho.obj", "dianaSolitaGancho.mtl", (object) => {
-			object.position.z = 0;
-			//object.rotation.x = THREE.Math.degToRad(-90);
-			object.position.x=30;
-			object.position.y=0;
-			object.scale.set(.1,.1,.1);
-
-			//scene.add(object);
-			isWorldReady[5] = true;
-			console.log("diana solita gancho x2 cargado 5");
-		});
 		loadOBJWithMTL("models/nuevosModelos/", "lobo.obj", "lobo.mtl", (object) => {
 					
 
@@ -625,8 +578,71 @@
 			isWorldReady[6] = true;
 		});*/
 
-			var idEsc=getQueryVariable("id");
+	var idEsc=getQueryVariable("id");
 	if(idEsc==1){
+		loadOBJWithMTL("models/nuevosModelos/", "dianaGrande.obj", "dianaGrande.mtl", (object) => {
+			object.position.z = -10;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.scale.set(.1,.1,.1);
+			objetivos.Agregar(object.position,1,object);
+
+			object.position.z = 10;
+
+			objetivos.Agregar(object.position,1,object);
+			//scene.add(object);
+			console.log("Diana grande cargado 1");
+			isWorldReady[1] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSobrePalito.obj", "dianaSobrePalito.mtl", (object) => {
+			object.position.z = -30;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=30;
+			object.scale.set(.1,.1,.1);
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=15;
+			objetivos.Agregar(object.position,1,object);
+			//scene.add(object);
+			console.log("Diana sobre Palito cargado 2");
+			isWorldReady[2] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaCuerdita.obj", "dianaSolitaCuerdita.mtl", (object) => {
+			object.position.z = -30;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=-30;
+			object.position.y=5;
+			object.scale.set(.1,.1,.1);
+			
+			//scene.add(object);
+			console.log("diana solita cuerdita cargado 3");
+			isWorldReady[3] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaGancho.obj", "dianaSolitaGancho.mtl", (object) => {
+			object.position.z = -30;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=0;
+			object.position.y=5;
+			object.scale.set(.1,.1,.1);
+			objetivos.Agregar(object.position,1,object);
+			
+			console.log("diana solita gancho cargado 4"); 
+			isWorldReady[4] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaGancho.obj", "dianaSolitaGancho.mtl", (object) => {
+			object.position.z = 0;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=30;
+			object.position.y=0;
+			object.scale.set(.1,.1,.1);
+
+			//scene.add(object);
+			isWorldReady[5] = true;
+			console.log("diana solita gancho x2 cargado 5");
+		});
+
 		loadOBJWithMTL("models/terrenoPlano/", "terreno1.obj", "terreno1.mtl", (object) => {
 			object.position.z = -0;
 			//object.rotation.x = THREE.Math.degToRad(-90);
@@ -636,7 +652,7 @@
 			scene.add(object);
 			console.log("el escenario completo cargado 9");
 			//objects.push(object);
-			isWorldReady[9] = true;
+			isWorldReady[6] = true;
 		});
 		loadOBJWithMTL("models/terrenoPlano/", "awaTerreno1.obj", "awaTerreno1.mtl", (object) => {
 			object.position.z = -0;
@@ -662,6 +678,64 @@
 		});
 	}else{
 		if(idEsc==2){
+			loadOBJWithMTL("models/nuevosModelos/", "dianaGrande.obj", "dianaGrande.mtl", (object) => {
+			object.position.z = -10;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.scale.set(.1,.1,.1);
+			objetivos.Agregar(object.position,1,object);
+			//scene.add(object);
+			console.log("Diana grande cargado 1");
+			isWorldReady[1] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSobrePalito.obj", "dianaSobrePalito.mtl", (object) => {
+			object.position.z = -30;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=30;
+			object.scale.set(.1,.1,.1);
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=15;
+			objetivos.Agregar(object.position,1,object);
+			//scene.add(object);
+			console.log("Diana sobre Palito cargado 2");
+			isWorldReady[2] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaCuerdita.obj", "dianaSolitaCuerdita.mtl", (object) => {
+			object.position.z = -30;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=-30;
+			object.position.y=5;
+			object.scale.set(.1,.1,.1);
+			
+			//scene.add(object);
+			console.log("diana solita cuerdita cargado 3");
+			isWorldReady[3] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaGancho.obj", "dianaSolitaGancho.mtl", (object) => {
+			object.position.z = -30;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=0;
+			object.position.y=5;
+			object.scale.set(.1,.1,.1);
+			objetivos.Agregar(object.position,1,object);
+			
+			console.log("diana solita gancho cargado 4"); 
+			isWorldReady[4] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaGancho.obj", "dianaSolitaGancho.mtl", (object) => {
+			object.position.z = 0;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=30;
+			object.position.y=0;
+			object.scale.set(.1,.1,.1);
+
+			//scene.add(object);
+			isWorldReady[5] = true;
+			console.log("diana solita gancho x2 cargado 5");
+		});
 			loadOBJWithMTL("models/terrenoPlano/", "terreno2.obj", "terreno2.mtl", (object) => {
 				object.position.z = -0;
 				//object.rotation.x = THREE.Math.degToRad(-90);
@@ -671,7 +745,7 @@
 				scene.add(object);
 				console.log("el escenario completo cargado 9");
 				objects.push(object);
-				isWorldReady[9] = true;
+				isWorldReady[6] = true;
 			});
 			loadOBJWithMTL("models/elementosTerrenoPlano/", "elementosTerreno2.obj", "elementosTerreno2.mtl", (object) => {
 				object.position.z = -0;
@@ -686,7 +760,76 @@
 			});
 		}else{
 			if(idEsc==3){
+				loadOBJWithMTL("models/nuevosModelos/", "dianaGrande.obj", "dianaGrande.mtl", (object) => {
+			object.position.z = -10;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.scale.set(.1,.1,.1);
+			objetivos.Agregar(object.position,1,object);
+			//scene.add(object);
+			console.log("Diana grande cargado 1");
+			isWorldReady[1] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSobrePalito.obj", "dianaSobrePalito.mtl", (object) => {
+			object.position.z = -30;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=30;
+			object.scale.set(.1,.1,.1);
+			objetivos.Agregar(object.position,1,object);
+			object.position.x=15;
+			objetivos.Agregar(object.position,1,object);
+			//scene.add(object);
+			console.log("Diana sobre Palito cargado 2");
+			isWorldReady[2] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaCuerdita.obj", "dianaSolitaCuerdita.mtl", (object) => {
+			object.position.z = -30;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=-30;
+			object.position.y=5;
+			object.scale.set(.1,.1,.1);
+			
+			//scene.add(object);
+			console.log("diana solita cuerdita cargado 3");
+			isWorldReady[3] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaGancho.obj", "dianaSolitaGancho.mtl", (object) => {
+			object.position.z = -30;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=0;
+			object.position.y=5;
+			object.scale.set(.1,.1,.1);
+			objetivos.Agregar(object.position,1,object);
+			
+			console.log("diana solita gancho cargado 4"); 
+			isWorldReady[4] = true;
+		});
+
+		loadOBJWithMTL("models/nuevosModelos/", "dianaSolitaGancho.obj", "dianaSolitaGancho.mtl", (object) => {
+			object.position.z = 0;
+			//object.rotation.x = THREE.Math.degToRad(-90);
+			object.position.x=30;
+			object.position.y=0;
+			object.scale.set(.1,.1,.1);
+
+			//scene.add(object);
+			isWorldReady[5] = true;
+			console.log("diana solita gancho x2 cargado 5");
+		});
 				loadOBJWithMTL("models/terrenoPlano/", "terreno3.obj", "terreno3.mtl", (object) => {
+					object.position.z = -200;
+					//object.rotation.x = THREE.Math.degToRad(-90);
+					object.position.x=0;
+					object.position.y=-1;
+					object.scale.set(5,5,5);
+					scene.add(object);
+					console.log("el escenario completo cargado 9");
+					objects.push(object);
+					isWorldReady[6] = true;
+				});
+				loadOBJWithMTL("models/terrenoPlano/", "awaTerreno3.obj", "awaTerreno3.mtl", (object) => {
 					object.position.z = -200;
 					//object.rotation.x = THREE.Math.degToRad(-90);
 					object.position.x=0;
@@ -697,7 +840,7 @@
 					objects.push(object);
 					isWorldReady[9] = true;
 				});
-				loadOBJWithMTL("models/terrenoPlano/", "awaTerreno3.obj", "awaTerreno3.mtl", (object) => {
+				loadOBJWithMTL("models/elementosTerrenoPlano/", "elementosTerreno3.obj", "elementosTerreno3.mtl", (object) => {
 					object.position.z = -200;
 					//object.rotation.x = THREE.Math.degToRad(-90);
 					object.position.x=0;
@@ -916,8 +1059,10 @@
   				proyectiles2.agregarProyectil(vector2,vector);
 		} else if (keys["M"]) {
 
-			PRUEBA=true;
-
+			//PRUEBA=true;
+			let vector = new THREE.Vector3();
+			camera2.getWorldPosition ( vector );
+			console.log(vector);
 		}
 
 
@@ -1041,9 +1186,26 @@
 				<button id="BtnSalirMenu" class="btn btn-Menu">Volver al Menu</button>
 			</div>
 		</center>
-		
-        
     </div>
+	<div class="imgWin">
+		<center>
+			<h3 id="win">Jugador tal, has ganado</h3>
+			<h4 id="puntJ1">Puntuacion final</h4>
+		</center>
+		
+		<center>
+			<img src="CSS/botonOpciones.png" alt="nombresito" style="height: 150px; width: 150px;">
+		</center>
+	</div>
+	<div class="imgLose">
+		<center>
+			<h3 id="lose">Jugador tal, has perdido</h3>
+			<h4 id="puntJ2">Puntuacion final</h4>
+		</center>
+		<center>
+			<img src="CSS/botonJugar.png" alt="nombresito" style="height: 150px; width: 150px;">
+		</center>
+	</div>
 </div>
 </body>
 </html>

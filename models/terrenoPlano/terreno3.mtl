@@ -1,7 +1,7 @@
 # 3ds Max Wavefront OBJ Exporter v0.99 - (c)2007 guruware
-# File Created: 03.06.2021 16:36:26
+# File Created: 06.06.2021 16:10:43
 
-newmtl bosque_lambert4
+newmtl terreno3_bosque_lambert4
 	Kd 0.1205 0.1049 0.0845
 	Ks 0.9000 0.9000 0.9000
 	Tr 0.0000
