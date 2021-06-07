@@ -66,7 +66,8 @@
 
 			$(".btn-Retornar").click(function () {
                 $(".mPausa").css("visibility", "hidden");
-                pauseGame = false;
+                pausa = false;
+                  relojfinal.reanudar();
             });
 
 
@@ -235,6 +236,38 @@
 
             	}
             }
+
+            class  clasereloj{
+            	 relojfinal = new THREE.Clock();
+            	 cargar = false;
+            	 acumulado = 0;
+            	 iniciar(){
+            	 	if(!this.cargar){
+            	 		this.cargar= true;
+            	 		this.relojfinal.start();
+            	 	}
+            	 }
+            	tiempo(){
+            var pasado = this.relojfinal.getElapsedTime();
+            var acumulado2 = parseInt(this.acumulado.toString(),"10"); 
+		 	pasado = parseInt(pasado.toString(),"10");
+			pasado = 180 - pasado - acumulado2;
+				return pasado;
+            	}
+
+
+            	pausar(){
+            		this.acumulado = this.acumulado +this.relojfinal.getElapsedTime();
+            	}
+
+            	reanudar(){
+            	this.relojfinal.start();
+
+            	}
+
+
+
+            }
             
 			function MovimientosJugador( camara,  objeto,  foward, yaw, lados,subir,jugador) {
 
@@ -371,7 +404,7 @@
 	var renderer;
 	var renderer2;
 	var controls;
-	var relojfinal = null;
+	var relojfinal = new clasereloj();;
 	//var objs= [];
 	var objects = [];
 	var PRUEBA = false;
@@ -407,12 +440,14 @@
     	}
 		$(".btn-Retornar").click(function () {
                 $(".mPausa").css("visibility", "hidden");
-                pauseGame = false;
+                pausa = false;
+                relojfinal.reanudar();
+               
             });
 
 
             $(".btn-Menu").click(function () { 
-				debugger;
+
                 setTimeout(function () {
                     window.location.href = "index.html";
                 }, 1000);
@@ -752,6 +787,7 @@
 		var forward2 = 0;
 		var lados2 = 0;
 		var subir2 = 0;
+		if(relojfinal.tiempo() > 0)
 		if(!pausa){
 		if(gamepads[0] != null){
 			
@@ -819,7 +855,9 @@
 			else
 			{
 				pausa =true;
+				relojfinal.pausar();
 				$(".mPausa").css("visibility", "visible");
+				
 			}
 		
 			keys["P"] = false;
@@ -835,7 +873,9 @@
 			else
 			{
 				pausa =true;
+				relojfinal.pausar();
 				$(".mPausa").css("visibility", "visible");
+				
 			}
 			
 			keys["P"] = false;
@@ -889,9 +929,7 @@
 
 		
 			/*MovimientosJugador( camara,  objeto,  foward, yaw, lados,subir)*/
-		if (relojfinal == null) {
-			relojfinal = new THREE.Clock();
-		}
+			relojfinal.iniciar();
 			let vector = new THREE.Vector3();
 
 			MovimientosJugador( camera2,  lobo,  forward2, yaw2, lados2,subir2,jugador2);
@@ -910,10 +948,8 @@
 			objetivos.ActualizarObjetivos();
 
 			var timer = document.getElementById("textoTiempo");
-			var pasado = relojfinal.getElapsedTime();
-		 	pasado = parseInt(pasado.toString(),"10");
-			pasado = 180 - pasado;
-			timer.innerHTML = "Time: "+ pasado;
+		
+			timer.innerHTML = "Time: "+ relojfinal.tiempo();
 
 			/*camera2.rotation.y += yaw2 * deltaTime;
 			camera2.translateZ(forward2 * deltaTime);
