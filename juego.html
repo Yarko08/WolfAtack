@@ -81,6 +81,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script> 
     <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-database.js"></script> 
 	<link rel="stylesheet" href="CSS/pausa.css">
+
 	<script type="text/javascript">
 			
 			  var firebaseConfig = {
@@ -576,14 +577,8 @@
 	var idEsc=getQueryVariable("id");
 	if(idEsc==1){
 		loadOBJWithMTL("models/nuevosModelos/", "pollito.obj", "pollito.mtl", (object) => {
-			
-
-
 		object.rotation.y = THREE.Math.degToRad(180);
 		object.scale.set(.1,.1,.1);
-	
-
-		
 		var ancla = new THREE.Object3D();
 			ancla.position.x=10;
 			ancla.position.z=10;
@@ -609,13 +604,8 @@
 			scene.add(object);
 			scene.add(ancla);
 
-		
-
 			isWorldReady[6] = true;;
 			console.log("cargar pollito normal terminado 6 ");
-
-
-
 
 		});
 
@@ -788,17 +778,33 @@
 			//objects.push(object);
 			isWorldReady[6] = true;
 		});
-		loadOBJWithMTL("models/terrenoPlano/", "awaTerreno1.obj", "awaTerreno1.mtl", (object) => {
-			object.position.z = -0;
-			//object.rotation.x = THREE.Math.degToRad(-90);
-			object.position.x=0;
-			object.position.y=-10;
-			object.scale.set(.2,.2,.2);
-			scene.add(object);
-			console.log("el escenario completo cargado 9");
-			//objects.push(object);
-			isWorldReady[9] = true;
-		});
+			
+    var geometry = new THREE.PlaneGeometry(100,600);
+	//geometry.translate(20,0);
+    var t_albedo2 = new THREE.TextureLoader().load('models/istockphoto-485210502-612x612.jpg');
+    var uniforms = {
+      t_albedo: { type: 't', value: new THREE.TextureLoader().load('models/istockphoto-485210502-612x612.jpg') }
+    };
+
+    var material = new THREE.ShaderMaterial( {
+      uniforms:       uniforms,
+      vertexShader:   document.getElementById('sky-vertex').textContent,
+      fragmentShader: document.getElementById('sky-fragment').textContent
+    });
+
+    wata = new THREE.Mesh(geometry, material);
+    wata.material.side = THREE.DoubleSide; 
+    wata.rotation.x=Math.PI/2;
+	wata.position.x-=170;
+	
+	wata.position.y-=9;
+	//geometry.translate(10,0);
+
+    scene.add(wata);
+	isWorldReady[9] = true;
+	
+
+
 		loadOBJWithMTL("models/elementosTerrenoPlano/", "elementosTerreno1.obj", "elementosTerreno1.mtl", (object) => {
 			object.position.z = -0;
 			//object.rotation.x = THREE.Math.degToRad(-90);
@@ -1625,7 +1631,25 @@
 </head>
 
 <body>
+	<script type="application/x-glsl" id="sky-vertex">
+		varying vec2 vUV;
 	
+		void main() {
+		  vUV = uv;
+		  vec4 pos = vec4(position, 1.0);
+		  gl_Position = projectionMatrix * modelViewMatrix * pos;
+		}
+		</script>
+	<script type="application/x-glsl" id="sky-fragment">
+		uniform sampler2D t_albedo;
+		varying vec2 vUV;
+	
+		void main() {
+		  vec4 texel = texture2D(t_albedo, vUV);
+		  gl_FragColor = vec4(texel.xyz, texel.w);
+		}
+	</script>
+
 	<div class =".flex-container" style="display: flex; height: 100px;">
 
 	<div style ="width: 49%; 	border: 2px solid yellow;" id="scene-section"/></div>
